@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxyt.ocpp.publish.mapper.sys.IUserMapper">
+
+    <resultMap id="BaseResultMap" type="com.zxyt.ocpp.publish.entity.sys.User">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="channel_id" jdbcType="VARCHAR" property="channelId"/>
+        <result column="area_id" jdbcType="VARCHAR" property="areaId"/>
+        <result column="organization_id" jdbcType="VARCHAR" property="organizationId"/>
+        <result column="user_group_id" jdbcType="VARCHAR" property="userGroupId"/>
+        <result column="longitude" jdbcType="DOUBLE" property="longitude"/>
+        <result column="latitude" jdbcType="DOUBLE" property="latitude"/>
+        <result column="altitude" jdbcType="DOUBLE" property="altitude"/>
+        <result column="job" jdbcType="VARCHAR" property="job"/>
+        <result column="duties" jdbcType="VARCHAR" property="duties"/>
+        <result column="leader" jdbcType="VARCHAR" property="leader"/>
+        <result column="age" jdbcType="SMALLINT" property="age"/>
+        <result column="sex" jdbcType="SMALLINT" property="sex"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="channel_name" jdbcType="VARCHAR" property="channelName"/>
+        <result column="area_name" jdbcType="VARCHAR" property="areaName"/>
+        <result column="organization_name" jdbcType="VARCHAR" property="organizationName"/>
+        <result column="user_group_name" jdbcType="VARCHAR" property="userGroupName"/>
+    </resultMap>
+
+
+
+    <!-- 查询信息 -->
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT
+            u.id,
+            u.name,
+            u.code,
+            u.user_group_id,
+            ug.name user_group_name,
+            u.area_id,
+            a.area_name,
+            u.organization_id,
+            o.organization_name,
+            u.channel_id,
+            c.name channel_name,
+            j.job,
+            j.duties,
+            j.leader,
+            j.age,
+            j.sex,
+            j.address,
+            u.longitude,
+            u.latitude,
+            u.altitude,
+            u.create_time
+        FROM user u
+        LEFT JOIN user_group ug on ug.id = u.user_group_id
+        LEFT JOIN area a on a.id = u.area_id
+        LEFT JOIN organization o on o.id = u.organization_id
+        LEFT JOIN channel c on c.id = u.channel_id
+        LEFT JOIN user_job j on u.job_id = j.id
+        where 1=1
+        <if test="id != null and id != ''">AND u.id = #{id}</if>
+        <if test="name != null and name != ''">AND u.name LIKE '${name}%'</if>
+        <if test="code != null and code != ''">AND u.code LIKE '${code}%'</if>
+        <if test="userGroupId != null and userGroupId != ''">AND u.user_group_id = #{userGroupId}</if>
+        <if test="channelId != null and channelId != ''">AND u.channel_id = #{channelId}</if>
+        <if test="areaId != null and areaId != ''">AND u.area_id = #{areaId}</if>
+        <if test="organizationId != null and organizationId != ''">AND u.organization_id = #{organizationId}</if>
+        <choose>
+            <when test="sortName !=null and sortName!='id'">
+                ORDER BY ${sortName} ${sortOrder}
+            </when >
+            <otherwise>
+                ORDER BY u.create_time DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 根据id查询信息 -->
+    <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+            u.id,
+            u.name,
+            u.code,
+            u.user_group_id,
+            ug.name user_group_name,
+            u.area_id,
+            a.area_name,
+            u.organization_id,
+            o.organization_name,
+            u.channel_id,
+            c.name channel_name,
+            j.job,
+            j.duties,
+            j.leader,
+            j.age,
+            j.sex,
+            j.address,
+            u.longitude,
+            u.latitude,
+            u.altitude,
+            u.create_time
+        FROM user u
+        LEFT JOIN user_group ug on ug.id = u.user_group_id
+        LEFT JOIN area a on a.id = u.area_id
+        LEFT JOIN organization o on o.id = u.organization_id
+        LEFT JOIN channel c on c.id = u.channel_id
+        LEFT JOIN user_job j on u.job_id = j.id
+        where 1=1
+        <if test="id != null and id != ''">AND u.id = #{id}</if>
+    </select>
+
+
+
+    <!-- 受众信息插入 -->
+    <insert id="insertUser" >
+        insert into user (id, name, code, user_group_id, channel_id, area_id,organization_id,job_id,
+        <if test="longitude != null and longitude != ''">longitude,</if>
+        <if test="latitude != null and latitude != ''">latitude,</if>
+        <if test="altitude != null and altitude != ''">altitude,</if>
+        create_time )
+        values
+        ( #{userId}, #{name}, #{code}, #{userGroupId}, #{channelId},#{areaId},#{organizationId},#{userJobId},
+        <if test="longitude != null and longitude != ''">#{longitude},</if>
+        <if test="latitude != null and latitude != ''"> #{latitude},</if>
+        <if test="altitude != null and altitude != ''"> #{altitude},</if>
+         now())
+    </insert>
+
+    <!-- 受众职务信息插入 -->
+    <insert id="insertUserJob" >
+        insert into user_job (id, name,sex,
+        <if test="job != null and job != ''">job,</if>
+        <if test="duties != null and duties != ''">duties,</if>
+        <if test="leader != null and leader != ''">leader,</if>
+        <if test="age != null and age != ''">age,</if>
+        <if test="address != null and address != ''">address,</if>
+        create_time,user_id)
+        values
+        ( #{userJobId}, #{name},#{sex},
+        <if test="job != null and job != ''">#{job},</if>
+        <if test="duties != null and duties != ''">#{duties},</if>
+        <if test="leader != null and leader != ''">#{leader},</if>
+        <if test="age != null and age != ''">#{age},</if>
+        <if test="address != null and address != ''"> #{address},</if>
+        now(),#{userId})
+    </insert>
+
+    <!-- 修改受众信息 -->
+    <update id="updateUser">
+        UPDATE user SET job_id = #{userJobId}, name=#{name},
+        code= #{code},user_group_id=#{userGroupId},
+        channel_id =#{channelId}, area_id=#{areaId},
+        organization_id=#{organizationId}
+        <if test="longitude != null and longitude != ''">,longitude =#{longitude}</if>
+        <if test="latitude != null and latitude != ''">,latitude= #{latitude}</if>
+        <if test="altitude != null and altitude != ''">,altitude= #{altitude}</if>
+        WHERE id = #{id}
+    </update>
+
+
+    <!--删除一条信息 -->
+    <delete id="deleteUserJobById">
+        DELETE FROM user_job WHERE user_id =#{id}
+
+    </delete>
+
+    <!--批量删除信息 -->
+    <delete id="deleteUserJobByIds">
+        DELETE FROM user_job WHERE user_id IN (
+        <foreach collection="id.split(',')" item="item"  separator=","  >
+            ${item}
+        </foreach>
+        )
+    </delete>
+
+    <select id="selectList" resultMap="BaseResultMap">
+
+        SELECT
+            uj.name,
+            uj.job,
+            uj.duties,
+            uj.leader,
+            uj.age,
+            uj.sex,
+            uj.address,
+            u.code,
+            u.latitude,
+            u.longitude,
+            o.organization_name
+        FROM
+         user u
+        LEFT JOIN user_job uj on uj.id = u.job_id
+        LEFT JOIN organization o on o.id = u.organization_id
+
+        where 1=1
+
+         <if test="channelName != null and channelName != '' ">
+             and u.channel_id = (SELECT id FROM channel where name = #{channelName})
+         </if>
+
+        <if test="areaId != null and areaId != '' ">
+            and u.area_id = #{areaId}
+        </if>
+
+        <if test="organizationId != null and organizationId != '' ">
+            and u.organization_id = #{organizationId}
+        </if>
+
+        <if test="type == 1">
+            and uj.leader is null
+        </if>
+        <if test="type == 2">
+            and uj.leader is not null
+        </if>
+
+    </select>
+
+    <!--查询受众的详细信息 -->
+    <select id="userDetails" resultMap="BaseResultMap">
+    SELECT job,duties,leader,age,address,DATE_FORMAT(create_time, '%Y-%m-%d %H:%i:%s') create_time FROM  user_job u where user_id= #{id}
+    order by create_time desc
+    </select>
+
+</mapper>
