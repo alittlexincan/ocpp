@@ -222,18 +222,18 @@ layui.use(["table","form","laytpl","layer","selectTree","zTree"], function(){
             });
         }
         /**
-         * 工具条：批量删除员工信息
+         * 工具条：批量删除角色信息
          * @returns {boolean}
          */
         ,'deleteBarBtn': function(){
-            var checkStatus = table.checkStatus('table')
+            let checkStatus = table.checkStatus('table')
                 ,data = checkStatus.data;
             if(data.length == 0){
                 layer.msg('请选中角色进行删除', {time: 2000});
                 return false;
             }
 
-            var id = '',count = 0;
+            let id = '',count = 0;
             for(var i = 0, len = data.length; i<len; i++){
                 id += "," + data[i].id;
                 count += data[i].child;
@@ -345,25 +345,25 @@ layui.use(["table","form","laytpl","layer","selectTree","zTree"], function(){
                                     autoParam:["id"],
                                     dataType:"json",
                                     dataFilter:function (treeId, parentNode, responseData) {
-                                        let data;
-                                        if(responseData.code == 200 && responseData.data!=null){
-                                            data = responseData.data;
-                                            for(let i = 0; i<data.length; i++){
-                                                if(data[i].id=='navigation')
-                                                    data[i].nocheck = true;
-                                                data[i].open = true;
+
+                                        if(responseData!=null){
+
+                                            for(let i = 0; i<responseData.length; i++){
+                                                if(responseData[i].id=='navigation')
+                                                    responseData[i].nocheck = true;
+                                                responseData[i].open = true;
                                             }
                                             // 根据选中的角色ID，查询该角色对应的菜单
                                             active.selectRoleInMenu(param.id, (res)=>{
                                                 res.forEach((menu)=>{
-                                                    for(let i = 0; i<data.length; i++){
-                                                        if(data[i].id == menu.id){
-                                                            data[i].checked = true;
+                                                    for(let i = 0; i<responseData.length; i++){
+                                                        if(responseData[i].id == menu.id){
+                                                            responseData[i].checked = true;
                                                         }
                                                         if(menu.child.length>0){
                                                             menu.child.forEach(child => {
-                                                                if(data[i].id == child.id){
-                                                                    data[i].checked = true;
+                                                                if(responseData[i].id == child.id){
+                                                                    responseData[i].checked = true;
                                                                 }
                                                             });
                                                         }
@@ -371,7 +371,7 @@ layui.use(["table","form","laytpl","layer","selectTree","zTree"], function(){
                                                 });
                                             });
                                         }
-                                        return data;
+                                        return responseData;
                                     }
                                 },
                                 check: {

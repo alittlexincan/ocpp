@@ -195,17 +195,26 @@
 
             <!-- 列表：数据行操作 -->
             <script type="text/html" id="btnGroupOption">
-                <shiro:hasPermission name="role">
+                <shiro:hasAnyRoles name="超级管理员,管理员">
                     <a class="layui-btn layui-btn-xs" lay-event="roleOption"><i class="layui-icon layui-icon-user"></i>分配角色</a>
-                </shiro:hasPermission>
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="updateOption"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="deleteOption"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="updateOption"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+                    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="deleteOption"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                </shiro:hasAnyRoles>
+
+                <!--<shiro:hasPermission name="role">-->
+                    <!--<a class="layui-btn layui-btn-xs" lay-event="roleOption"><i class="layui-icon layui-icon-user"></i>分配角色</a>-->
+                <!--</shiro:hasPermission>-->
             </script>
 
             <div class="layui-card-body">
                 <div class="layui-btn-group tableBar">
-                    <button class="layui-btn" data-type="addBarBtn">添加</button>
-                    <button class="layui-btn" data-type="deleteBarBtn">删除</button>
+
+
+                    <shiro:hasAnyRoles name="超级管理员,管理员">
+                        <button class="layui-btn" data-type="addBarBtn">添加</button>
+                        <button class="layui-btn" data-type="deleteBarBtn">删除</button>
+                    </shiro:hasAnyRoles>
+
                 </div>
                 <!-- 列表信息 -->
                 <table class="layui-table" lay-filter="table" id="table"></table>

@@ -10,6 +10,7 @@ import com.zxyt.ocpp.publish.entity.sys.Employee;
 import com.zxyt.ocpp.publish.entity.sys.Role;
 import com.zxyt.ocpp.publish.service.sys.IEmployeeService;
 import io.swagger.annotations.*;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,6 +56,8 @@ public class EmployeeController {
     })
     @PostMapping("/insert")
     public ResultObject<Object> insert(@ApiParam(hidden = true) @RequestParam Map<String,Object> map){
+        Object password = new SimpleHash("MD5", map.get("loginPassword").toString(),	map.get("loginName").toString(), 2);
+        map.put("loginPassword", password.toString());
         JSONObject json = new JSONObject(map);
         Employee user = JSON.parseObject(json.toJSONString(), new TypeReference<Employee>() {});
         int num = this.employeeService.insert(user);

@@ -1,10 +1,13 @@
 package com.zxyt.ocpp.publish.controller.sys;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zxyt.ocpp.publish.config.common.result.ResultObject;
 import com.zxyt.ocpp.publish.config.common.result.ResultResponse;
 import com.zxyt.ocpp.publish.entity.sys.ZTree;
 import com.zxyt.ocpp.publish.service.sys.IZTreeService;
 import io.swagger.annotations.*;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +42,11 @@ public class ZTreeController {
     })
     @PostMapping("/menu")
     public List<ZTree> getMenuTree(@ApiParam(hidden = true) @RequestParam Map<String,Object> map) {
-         return this.zTreeService.getMenuTree(map);
+        Subject subject = SecurityUtils.getSubject();
+        JSONObject json = (JSONObject) subject.getSession().getAttribute("employee");
+        map.put("areaId", json.getString("areaId"));
+        map.put("organizationId", json.getString("organizationId"));
+        return this.zTreeService.getMenuTree(map);
     }
 
 

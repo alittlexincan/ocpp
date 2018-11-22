@@ -9,6 +9,8 @@ import com.zxyt.ocpp.publish.config.common.result.ResultResponse;
 import com.zxyt.ocpp.publish.entity.sys.Menu;
 import com.zxyt.ocpp.publish.service.sys.IMenuService;
 import io.swagger.annotations.*;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,7 +42,11 @@ public class MenuController {
     })
     @PostMapping("/insert")
     public ResultObject<Object> insert(@ApiParam(hidden = true) @RequestParam Map<String,Object> map){
-        JSONObject json = new JSONObject(map);
+        Subject subject = SecurityUtils.getSubject();
+        JSONObject json = (JSONObject) subject.getSession().getAttribute("employee");
+        map.put("areaId", json.getString("areaId"));
+        map.put("organizationId", json.getString("organizationId"));
+        json.putAll(map);
         Menu menu = JSON.parseObject(json.toJSONString(), new TypeReference<Menu>() {});
         int num = this.menuService.insert(menu);
         if(num>0){
@@ -62,7 +68,11 @@ public class MenuController {
     })
     @PostMapping("/update")
     public ResultObject<Object> update(@ApiParam(hidden = true) @RequestParam Map<String,Object> map){
-        JSONObject json = new JSONObject(map);
+        Subject subject = SecurityUtils.getSubject();
+        JSONObject json = (JSONObject) subject.getSession().getAttribute("employee");
+        map.put("areaId", json.getString("areaId"));
+        map.put("organizationId", json.getString("organizationId"));
+        json.putAll(map);
         Menu menu = JSON.parseObject(json.toJSONString(), new TypeReference<Menu>() {});
         int num = this.menuService.update(menu);
         if(num>0){
@@ -122,6 +132,10 @@ public class MenuController {
     })
     @GetMapping("/select")
     public ResultObject<Object> selectAll(@ApiParam(hidden = true) @RequestParam Map<String,Object> map) {
+        Subject subject = SecurityUtils.getSubject();
+        JSONObject json = (JSONObject) subject.getSession().getAttribute("employee");
+        map.put("areaId", json.getString("areaId"));
+        map.put("organizationId", json.getString("organizationId"));
         PageInfo<Menu> pageInfo = this.menuService.selectAll(map);
         return ResultResponse.page(pageInfo.getTotal(), pageInfo.getList());
     }
