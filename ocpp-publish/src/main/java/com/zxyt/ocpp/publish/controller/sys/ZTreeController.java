@@ -38,9 +38,8 @@ public class ZTreeController {
             @ApiImplicitParam(name="level",value="菜单级别", dataType = "Integer",paramType = "query")
     })
     @PostMapping("/menu")
-    public ResultObject<Object> getMenuTree(@ApiParam(hidden = true) @RequestParam Map<String,Object> map) {
-        List<ZTree> areaTree = this.zTreeService.getMenuTree(map);
-        return ResultResponse.ok(areaTree);
+    public List<ZTree> getMenuTree(@ApiParam(hidden = true) @RequestParam Map<String,Object> map) {
+         return this.zTreeService.getMenuTree(map);
     }
 
 

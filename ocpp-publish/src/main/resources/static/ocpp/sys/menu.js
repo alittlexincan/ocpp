@@ -194,15 +194,15 @@ layui.use(["table","form","laytpl","layer","selectTree"], function(){
          * @returns {boolean}
          */
         ,'deleteBarBtn': function(){
-            var checkStatus = table.checkStatus('table')
+            let checkStatus = table.checkStatus('table')
                 ,data = checkStatus.data;
             if(data.length == 0){
                 layer.msg('请选中菜单进行删除', {time: 2000});
                 return false;
             }
 
-            var id = '',count = 0;
-            for(var i = 0, len = data.length; i<len; i++){
+            let id = '',count = 0;
+            for(let i = 0, len = data.length; i<len; i++){
                 id += ",'" + data[i].id + "'";
                 count += data[i].child;
             }
@@ -213,8 +213,8 @@ layui.use(["table","form","laytpl","layer","selectTree"], function(){
             }
 
             layer.confirm('确定删除这批菜单？', function(index){
-                var id = '';
-                for(var i = 0, len = data.length; i<len; i++){
+                let id = '';
+                for(let i = 0, len = data.length; i<len; i++){
                     id += ",'" + data[i].id + "'";
                 }
                 // 数据提交到后台，通用方法
@@ -343,7 +343,7 @@ layui.use(["table","form","laytpl","layer","selectTree"], function(){
      * 监控表头工具条按钮事件
      */
     $('.tableBar .layui-btn').on('click', function(){
-        var type = $(this).data('type');
+        let type = $(this).data('type');
         active[type] ? active[type].call(this) : '';
     });
 
