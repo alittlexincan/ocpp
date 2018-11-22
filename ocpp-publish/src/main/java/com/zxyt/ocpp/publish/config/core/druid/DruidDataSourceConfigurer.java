@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
@@ -21,6 +23,9 @@ import java.sql.SQLException;
  */
 @Slf4j
 @Configuration
+@PropertySources({
+        @PropertySource(value = {"file:D:/ocpp/config/ocpp.properties"},ignoreResourceNotFound=true,encoding = "UTF-8")
+})
 public class DruidDataSourceConfigurer {
 
     @Value("${spring.datasource.druid.url}")
@@ -77,8 +82,15 @@ public class DruidDataSourceConfigurer {
     @Value("${spring.datasource.druid.connectionProperties}")
     private String connectionProperties;
 
+    @Value("${logging.level.com.zxyt.ocpp.publish}")
+    private String loggingLevel;
+
+    @Value("${logging.file}")
+    private String loggingFile;
+
     @Bean
     public DataSource getDataSource() {
+
         DruidDataSource datasource = new DruidDataSource();
         datasource.setUrl(this.dbUrl);
         datasource.setUsername(username);
