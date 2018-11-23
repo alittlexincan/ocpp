@@ -24,7 +24,7 @@ import java.sql.SQLException;
 @Slf4j
 @Configuration
 @PropertySources({
-        @PropertySource(value = {"file:D:/ocpp/config/ocpp.properties"},ignoreResourceNotFound=true,encoding = "UTF-8")
+        @PropertySource(value = {"file:D:/ocpp/config/db.properties"},ignoreResourceNotFound=true,encoding = "UTF-8")
 })
 public class DruidDataSourceConfigurer {
 

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxyt.ocpp.publish.mapper.sys.IChannelConfigMapper">
+
+    <resultMap id="BaseResultMap" type="com.zxyt.ocpp.publish.entity.sys.ChannelConfig">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="channel_code" jdbcType="VARCHAR" property="channelCode"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="area_id" jdbcType="VARCHAR" property="areaId"/>
+        <result column="organization_id" jdbcType="VARCHAR" property="organizationId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+
+    <!-- 查询渠道配置信息 -->
+    <select id="findAll" resultMap="BaseResultMap">
+        select
+        cc.id,
+        cc.channel_code,
+        cc.content,
+        cc.area_id,
+        cc.organization_id,
+        cc.create_time
+        FROM channel_config cc where 1=1
+        <if test="id != null and id != ''">AND cc.id = #{id}</if>
+        <if test="channelCode != null and channelCode != ''">AND cc.channel_code = #{channelCode}</if>
+        <if test="areaId != null and areaId != ''">AND cc.area_id = #{areaId}</if>
+        <if test="organizationId != null and organizationId != ''">AND cc.organization_id = #{organizationId}</if>
+        <choose>
+            <when test="sortName !=null and sortName!='id'">
+                ORDER BY ${sortName} ${sortOrder}
+            </when >
+            <otherwise>
+                ORDER BY cc.create_time DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <!--根据渠道类型删除配置信息-->
+    <delete id="deleteByType">
+        DELETE FROM channel_config WHERE content->'$.type' = #{type} and channel_code = #{channelCode}
+    </delete>
+
+</mapper>
