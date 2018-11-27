@@ -227,30 +227,55 @@
           <!--<if test=" organizationId != null and organizationId !='' "> and organization_id = #{organizationId} </if>-->
         <!--)-->
 
-        (
-            SELECT a.id id, a.area_name name, a.p_id p_id, 0 type FROM area a where 1=1
-            <if test="areaId != null and areaId != ''">
-                and FIND_IN_SET(id, getAreaCList('${areaId}'))
-            </if>
-        )union all(
-            SELECT o.id id, o.organization_name name, o.area_id p_id, 1 type FROM organization o where 1=1
-            <if test="areaId != null and areaId != ''">
-                and FIND_IN_SET(area_id, getAreaCList('${areaId}'))
-            </if>
-            <!--<if test="organizationId != null and organizationId != ''">-->
-                <!--and FIND_IN_SET(id, getOrgCList('${organizationId}'))-->
+        <!--(-->
+            <!--SELECT a.id id, a.area_name name, a.p_id p_id, 0 type FROM area a where 1=1-->
+            <!--<if test="areaId != null and areaId != ''">-->
+                <!--and FIND_IN_SET(id, getAreaCList('${areaId}'))-->
             <!--</if>-->
-        )union all(
-            SELECT ug.id id, ug.name name, ug.organization_id p_id, 2 type FROM user_group ug where 1=1
-            <if test="areaId != null and areaId != ''">
-                and FIND_IN_SET(area_id, getAreaCList('${areaId}'))
-            </if>
-            <if test="organizationId != null and organizationId != ''">
-                and FIND_IN_SET(organization_id, getOrgCList('${organizationId}'))
-            </if>
-        )
+        <!--)union all(-->
+            <!--SELECT o.id id, o.organization_name name, o.area_id p_id, 1 type FROM organization o where 1=1-->
+            <!--<if test="areaId != null and areaId != ''">-->
+                <!--and FIND_IN_SET(area_id, getAreaCList('${areaId}'))-->
+            <!--</if>-->
+        <!--)union all(-->
+            <!--SELECT ug.id id, ug.name name, ug.organization_id p_id, 2 type FROM user_group ug where 1=1-->
+            <!--<if test="areaId != null and areaId != ''">-->
+                <!--and FIND_IN_SET(area_id, getAreaCList('${areaId}'))-->
+            <!--</if>-->
+            <!--<if test="organizationId != null and organizationId != ''">-->
+                <!--and FIND_IN_SET(organization_id, getOrgCList('${organizationId}'))-->
+            <!--</if>-->
+        <!--)-->
 
-
+        SELECT
+            id,
+            name,
+            p_id,
+            area_id,
+            area_name,
+            organization_id,
+            organization_name,
+            user_group_id,
+            user_group_name,
+            type
+        from (
+            (
+                SELECT a.id id, a.area_name name, a.p_id p_id, a.id area_id, a.area_name area_name, null organization_id, null organization_name, null user_group_id, null user_group_name, 0 type FROM area a where 1=1
+                <if test="areaId != null and areaId != ''">
+                    and FIND_IN_SET(id, getAreaCList('${areaId}'))
+                </if>
+            )union all(
+                SELECT o.id id, o.organization_name name, o.area_id p_id, o.area_id area_id, null area_name, o.id organization_id, o.organization_name organization_name, null user_group_id, null user_group_name, 1 type FROM organization o  where 1=1
+                <if test="areaId != null and areaId != ''">
+                    and FIND_IN_SET(area_id, getAreaCList('${areaId}'))
+                </if>
+            )union all(
+                SELECT ug.id id, ug.name name, ug.organization_id p_id, ug.area_id area_id, null area_name, ug.organization_id organization_id, null organization_name, ug.id user_group_id, ug.name user_group_name, 2 type FROM user_group ug where 1=1
+                <if test="areaId != null and areaId != ''">
+                    and FIND_IN_SET(area_id, getAreaCList('${areaId}'))
+                </if>
+            )
+        ) tab
 
     </select>
 </mapper>

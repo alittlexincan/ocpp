@@ -133,7 +133,6 @@ public class ZTreeController {
         Subject subject = SecurityUtils.getSubject();
         JSONObject json = (JSONObject) subject.getSession().getAttribute("employee");
         map.put("areaId", json.getString("areaId"));
-        map.put("organizationId", json.getString("organizationId"));
         return this.zTreeService.getOrganizationUserGroupTree(map);
     }
 

@@ -62,13 +62,15 @@ layui.use(['table','form','laytpl','layer', 'selectTree', 'zTree'], function(){
      * 修改后重新刷新列表，curr: 1重新从第 1 页开始
      */
     let reloadTable = function (param) {
-        console.log(param);
         table.reload('table', {
             page: {
                 curr: 1
             },
             where: { //设定异步数据接口的额外参数，任意设
-                name: param == undefined ? '' : param.name
+                areaId:null
+                ,organizationId:null
+                ,userGroupId: null
+                ,name: param == undefined ? '' : param.name
                 ,code: param == undefined ? '' : param.code
                 ,channelId: param == undefined ? '' : param.channelId
             }
@@ -158,10 +160,16 @@ layui.use(['table','form','laytpl','layer', 'selectTree', 'zTree'], function(){
      */
     let userGroupClick = function(event, treeId, treeNode){
         let where = {};
-        if(treeNode.type == 1){
+        if(treeNode.type == 0) {
+            where.areaId = treeNode.areaId;
             where.userGroupId = null;
+            where.organizationId = null;
+        }else if(treeNode.type==1){
+            where.areaId = null;
             where.organizationId = treeNode.organizationId;
+            where.userGroupId = null;
         }else {
+            where.areaId = null;
             where.organizationId = null;
             where.userGroupId = treeNode.id;
         }

@@ -229,6 +229,16 @@ layui.use(['table','form','laydate','element','laytpl','layer','zTree','selectTr
                 url: "/tree/area",
                 autoParam:["id"],
                 dataType:"json",
+                dataFilter:(treeId, parentNode, responseData) => {
+                    if (responseData) {
+                        responseData.forEach(node => {
+                            if(node.id == employee.areaId || node.pId == employee.areaId){
+                                node.checked = true;
+                            }
+                        });
+                    }
+                    return responseData;
+                }
             },
             check: {
                 enable: true,

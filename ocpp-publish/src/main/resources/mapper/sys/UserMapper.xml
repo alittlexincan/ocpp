@@ -64,8 +64,12 @@
         <if test="code != null and code != ''">AND u.code LIKE '${code}%'</if>
         <if test="userGroupId != null and userGroupId != ''">AND u.user_group_id = #{userGroupId}</if>
         <if test="channelId != null and channelId != ''">AND u.channel_id = #{channelId}</if>
-        <if test="areaId != null and areaId != ''">AND u.area_id = #{areaId}</if>
-        <if test="organizationId != null and organizationId != ''">AND u.organization_id = #{organizationId}</if>
+        <if test="areaId != null and areaId != ''">
+            AND FIND_IN_SET(a.id, getAreaCList('${areaId}'))
+        </if>
+        <if test="organizationId != null and organizationId != ''">
+            AND FIND_IN_SET(o.id, getOrgCList('${organizationId}'))
+        </if>
         <choose>
             <when test="sortName !=null and sortName!='id'">
                 ORDER BY ${sortName} ${sortOrder}

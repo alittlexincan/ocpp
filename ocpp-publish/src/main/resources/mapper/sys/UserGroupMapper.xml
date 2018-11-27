@@ -35,8 +35,12 @@
         <if test="id != null and id != ''">AND ug.id = #{id}</if>
         <if test="name != null and name != ''">AND ug.name LIKE '${name}%'</if>
         <if test="pId != null and pId != ''">AND ug.p_id = #{pId}</if>
-        <if test="areaId != null and areaId != ''">AND ug.area_id = #{areaId}</if>
-        <if test="organizationId != null and organizationId != ''">AND ug.organization_id = #{organizationId}</if>
+        <if test="areaId != null and areaId != ''">
+            AND FIND_IN_SET(a.id, getAreaCList('${areaId}'))
+        </if>
+        <if test="organizationId != null and organizationId != ''">
+            AND FIND_IN_SET(o.id, getOrgCList('${organizationId}'))
+        </if>
         <if test="channelId != null and channelId != ''">AND ug.channel_id = #{channelId}</if>
         <choose>
             <when test="sortName !=null and sortName!='id'">

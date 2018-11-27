@@ -51,7 +51,9 @@ layui.use(['table','form','laytpl','layer', 'selectTree', 'zTree'], function(){
                 curr: 1
             },
             where: { //设定异步数据接口的额外参数，任意设
-                name: param == undefined ? '' : param.name
+                areaId: null
+                ,id: null
+                ,name: param = undefined ? '' : param.name
                 ,organizationId: param == undefined ? '' : param.organizationId
             }
         });
@@ -128,12 +130,18 @@ layui.use(['table','form','laytpl','layer', 'selectTree', 'zTree'], function(){
      * @param treeId
      * @param treeNode
      */
-    var userGroupClick = function(event, treeId, treeNode){
-        var where = {};
-        if(treeNode.type == 1){
+    let userGroupClick = function(event, treeId, treeNode){
+        let where = {};
+        if(treeNode.type == 0) {
+            where.areaId = treeNode.areaId;
             where.id = null;
+            where.organizationId = null;
+        }else if(treeNode.type==1){
+            where.areaId = null;
             where.organizationId = treeNode.organizationId;
+            where.id = null;
         }else {
+            where.areaId = null;
             where.organizationId = null;
             where.id = treeNode.id;
         }
