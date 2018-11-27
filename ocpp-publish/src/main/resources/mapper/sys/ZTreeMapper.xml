@@ -177,27 +177,80 @@
 
     <!-- 查询群组对应受众个数树 -->
     <select id="getUserGroupCountTree" resultMap="ZTreeUserGroupResultMap">
-        SELECT
-            ug.id,
-            ug.p_id,
-            ug.name,
-            ug.channel_id,
-            ug.area_id,
-            (SELECT count(1) from user u where u.user_group_id = ug.id) count
-        FROM
-          user_group ug
-        where 1=1
-        <if test="id != null and id != ''">AND ug.id = #{id}</if>
-        <if test="pId != null and pId != ''">AND ug.p_id = #{pId}</if>
-        <if test="areaId != null and areaId != ''">
-            AND ug.area_id in
-            <foreach collection="areaId.split(',')" item="item" open="(" close=")" separator=",">
-                #{item}
-            </foreach>
-        </if>
-        <if test="organizationId != null and organizationId != ''">AND ug.organization_id = #{organizationId}</if>
-        <if test="channelId != null and channelId != ''">AND ug.channel_id = #{channelId}</if>
+        <!--SELECT-->
+            <!--ug.id,-->
+            <!--ug.p_id,-->
+            <!--ug.name,-->
+            <!--ug.channel_id,-->
+            <!--ug.area_id,-->
+            <!--(SELECT count(1) from user u where u.user_group_id = ug.id) count-->
+        <!--FROM-->
+          <!--user_group ug-->
+        <!--where 1=1-->
+        <!--<if test="id != null and id != ''">AND ug.id = #{id}</if>-->
+        <!--<if test="pId != null and pId != ''">AND ug.p_id = #{pId}</if>-->
+        <!--<if test="areaId != null and areaId != ''">-->
+            <!--AND ug.area_id in-->
+            <!--<foreach collection="areaId.split(',')" item="item" open="(" close=")" separator=",">-->
+                <!--#{item}-->
+            <!--</foreach>-->
+        <!--</if>-->
+        <!--<if test="organizationId != null and organizationId != ''">AND ug.organization_id = #{organizationId}</if>-->
+        <!--<if test="channelId != null and channelId != ''">AND ug.channel_id = #{channelId}</if>-->
 
+        (
+            SELECT
+                a.id,
+                a.p_id,
+                a.area_name NAME,
+                #{channelId} channel_id,
+                a.id area_id,
+                0 count,
+                0 type
+            FROM area a WHERE 1=1
+            <if test="areaId != null and areaId != ''">
+                AND a.id IN
+                <foreach collection="areaId.split(',')" item="item" open="(" close=")" separator=",">
+                #{item}
+                </foreach>
+            </if>
+        )UNION ALL(
+            SELECT
+                o.id,
+                o.area_id p_id,
+                o.organization_name NAME,
+                #{channelId} channel_id,
+                o.area_id,
+                0 count,
+                1 type
+            FROM organization o  where 1=1
+            <if test="organizationId != null and organizationId != ''">
+                <!--and FIND_IN_SET(o.id, getOrgCList('${organizationId}'))-->
+                AND (FIND_IN_SET(o.id,getOrgCList ('${organizationId}')) or p_id is null or p_id = '')
+                and type = 1
+            </if>
+        )UNION ALL(
+            SELECT
+                ug.id,
+                (case when ug.organization_id = ''    THEN ug.area_id
+                      when ug.organization_id is null THEN ug.area_id
+                      else ug.organization_id end)  p_id,
+                ug.NAME,
+                ug.channel_id,
+                ug.area_id,
+                (SELECT COUNT(1) FROM USER u WHERE u.user_group_id = ug.id ) count,
+                2 type
+            FROM user_group ug where 1=1
+            <if test="areaId != null and areaId != ''">
+                AND ug.area_id IN
+                <foreach collection="areaId.split(',')" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="channelId != null and channelId !=''">
+                AND ug.channel_id = #{channelId}
+            </if>
+        )
     </select>
 
     <!--机构对应群组树-->

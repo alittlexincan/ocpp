@@ -63,7 +63,7 @@ layui.use(['table','form','laydate','element','laytpl','layer','zTree','selectTr
                         dataType:"json",
                         dataFilter:function (treeId, parentNode, responseData) {
                             if(responseData!=null){
-                                for(var i = 0; i<responseData.length; i++){
+                                for(let i = 0; i<responseData.length; i++){
                                     responseData[i].checked = true;
                                 }
                             }
@@ -177,11 +177,11 @@ layui.use(['table','form','laydate','element','laytpl','layer','zTree','selectTr
                     /**
                      * 获取选中渠道
                      */
-                    "channels": [{channelId:channelId, channelName: channelName}]
+                    channels: [{channelId:channelId, channelName: channelName}]
                     /**
                      * 获取选中地区
                      */
-                    ,"areas": function () {
+                    ,areas: function () {
                         let area = [];
                         initAreaTree.getCheckedNodes().forEach(function (item) {
                             area.push({
@@ -191,6 +191,7 @@ layui.use(['table','form','laydate','element','laytpl','layer','zTree','selectTr
                         });
                         return area;
                     }()
+                    ,organizationId: employee.organizationId
                 };
                 // 删除tab id 为choose-tab的table页
                 element.tabDelete("ocpp-tab", "choose-tab");
