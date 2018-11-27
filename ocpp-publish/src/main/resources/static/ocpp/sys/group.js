@@ -97,12 +97,12 @@ layui.use(['table','form','laytpl','layer', 'selectTree', 'zTree'], function(){
                 return '请选择所属地区';
             }
         }
-        ,organizationId: function(value){
-            if(value.length == 0) {
-                $("#addOrganizationId .addOrganizationIdShow, #updateOrganizationId .updateOrganizationIdShow").css("border-color","red");
-                return '请选择所属机构';
-            }
-        }
+        // ,organizationId: function(value){
+        //     if(value.length == 0) {
+        //         $("#addOrganizationId .addOrganizationIdShow, #updateOrganizationId .updateOrganizationIdShow").css("border-color","red");
+        //         return '请选择所属机构';
+        //     }
+        // }
         ,channelId: function (value) {
             if(value.length == 0) return '请选择所属渠道';
         }
