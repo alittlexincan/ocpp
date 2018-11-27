@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @Author: JiangXincan
@@ -46,6 +47,7 @@ public class MenuController {
         JSONObject json = (JSONObject) subject.getSession().getAttribute("employee");
         map.put("areaId", json.getString("areaId"));
         map.put("organizationId", json.getString("organizationId"));
+        map.put("id", UUID.randomUUID().toString().replace("-",""));
         json.putAll(map);
         Menu menu = JSON.parseObject(json.toJSONString(), new TypeReference<Menu>() {});
         int num = this.menuService.insert(menu);

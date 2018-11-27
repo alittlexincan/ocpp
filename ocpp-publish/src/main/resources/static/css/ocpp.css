@@ -43,17 +43,245 @@ website:    http://code.google.com/p/jquerytree/
     top: 1px;
     right: 5px;
 }
+.layui-form .layui-form-item .ocpp-input-border,
+.layui-form .layui-inline .ocpp-input-border{
+    border: 1px solid #e6e6e6!important;
+}
+
+.ocpp-input-border .layui-form-radio,
+.ocpp-input-border .layui-form-switch {
+     margin-top: 4px;
+     margin-bottom: 4px;
+}
 
 /**更改layui end*/
-
-/** 更改tab切换样式 start **/
-.ocpp-tab-content{
-    border: 1px solid #e6e6e6;
-    border-top: none;
-}
-/** 更改tab切换样式 end **/
 
 .ocpp-font-color{
     color: #009688;
 }
 
+
+
+/* 渠道 start*/
+.message .ocpp-card-body{
+    padding-bottom: 0px;
+}
+.message .layui-card-body .channel-option{
+    float: left;
+    margin-right: 10px;
+}
+.message .layui-card-body .channel-option div{
+    margin-top: 9px;
+}
+
+.message .layui-card-body .channel-list{
+    display: inline-block;
+}
+
+.message .layui-card-body .imgbox{
+    width: 58px;
+    border: 3px solid rgb(230, 232, 232);
+    position: relative;
+    margin-right: 5px;
+    float: left;
+}
+.message .layui-card-body .imgbox-gray{
+    width: 58px;
+    border: 3px solid rgb(230, 232, 232);
+    position: relative;
+    margin: 2px 5px 0px 0px;
+    float: left;
+}
+
+.message .layui-card-body .imgbox:hover,
+.message .layui-card-body .imgbox.active{
+    border-color: rgb(20, 180, 140);
+    cursor: pointer;
+}
+
+.message .layui-card-body .imgbox:hover:after,
+.message .layui-card-body .imgbox.active:after{
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    border-bottom: 18px solid rgb(20, 180, 140);
+    border-left: 18px solid transparent;
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+}
+
+.message .layui-card-body .imgbox:hover:before,
+.message .layui-card-body .imgbox.active:before{
+    content: '';
+    width: 10px;
+    height: 5px;
+    margin: 0 auto;
+    border-left: 2px solid #FFF;
+    border-bottom: 2px solid #FFF;
+    position: absolute;
+    bottom: 2px;
+    right: -1px;
+    z-index: 2;
+    transform: rotate(-50deg);
+    -ms-transform: rotate(-50deg);
+    -moz-transform: rotate(-50deg);
+    -webkit-transform: rotate(-50deg);
+    -o-transform: rotate(-50deg);
+}
+
+.message .layui-card-body .imgbox img{
+    width: 100%;
+    height: 100%;
+}
+
+.message .layui-card-body .imgbox-gray img.gray {
+    width: 100%;
+    height: 100%;
+    -webkit-filter: contrast(15%); /* Chrome, Safari, Opera */
+    filter: contrast(15%);
+}
+
+.message .layui-card-body .imgbox span,
+.message .layui-card-body .imgbox-gray span{
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+    float: left;
+    margin-top: -6px;
+}
+/* 渠道 end*/
+
+/*信息编辑tab页*/
+.message .ocpp-form-inline-width{
+    width:500px;
+}
+.message .ocpp-input-inline-width{
+    width: 390px;
+}
+.message .ocpp-form-inline-margin{
+    margin-left: 10px;
+    margin-top: -1px;
+}
+.message .ocpp-tab{
+    position: relative;
+    padding: 0px;
+    border-radius: 0;
+    box-shadow: none;
+    left: -1px;
+    top: -1px;
+    width: 100%;
+    border-bottom: none;
+}
+.message .ocpp-card-body-height{
+    min-height: 574px;
+}
+
+.message .ocpp-content{
+    padding: 0px;
+    width: 100%;
+    height: 589px;
+}
+
+.message #message{
+    margin: 5px;
+    width:  calc(100% - 10px);
+    position: relative;
+    z-index: 1;
+}
+.message .layui-tab .ocpp-tab-title{
+    width: calc(100% - 50px);
+    margin-left: 25px;
+    overflow: hidden;
+}
+.message .layui-tab .ocpp-tab-title > li{
+    padding: 0;
+    margin: 0;
+    width: 95px;
+}
+.message .ocpp-tab .ocpp-tab-content{
+    padding: 5px;
+    height: 542px;
+}
+.message .ocpp-tab .ocpp-tab-content > div{
+    height: calc(100% - 50px);
+}
+
+.message .layui-tab-bar{
+    display: none;
+}
+
+.message .ocpp-tab-prev{
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: 25px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border: 1px solid #e6e6e6;
+    margin: 0 15px 0 0;
+    z-index: 1;
+    cursor: pointer;
+}
+.message .ocpp-tab-next{
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    width: 25px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border: 1px solid #e6e6e6;
+    cursor: pointer;
+}
+.message .ocpp-card-content{
+    border: none;
+    box-shadow: none;
+    height: 542px;
+}
+.message .ocpp-card-content-list{
+    padding: 5px;
+    height: 228px;
+    overflow: auto;
+    overflow-x: hidden;
+}
+.message .ocpp-content-skip{
+    line-height: 540px;
+    text-align: center;
+    font-size: 26px;
+    color: #2f9688;
+
+}
+.message .ocpp-card-content-list .ocpp-content-item{
+    padding: 5px;
+    height: 100px;
+    border: 1px solid #e6e6e6;
+    margin-bottom: 5px;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -o-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ws-border-radius: 3px;
+}
+.message .ocpp-card-content-list .ocpp-content-title > div,
+.message .ocpp-card-content-list .ocpp-content-body > div{
+    border: 1px solid #e6e6e6;
+    min-height: 70px;
+}
+.message .ocpp-card-content-list .ocpp-content-title > div{
+    text-align: right;
+    padding-right: 5px;
+}
+.message .ocpp-card-content-list .ocpp-content-body > div{
+    outline: none;
+    padding: 0 5px 0 8px;
+}
+.message .ocpp-card-content-list .ocpp-content-body > textarea{
+    outline: none;
+    height: 72px;
+    min-height: 72px;
+    padding: 1px 5px;
+}
+/* 信息编辑 end*/

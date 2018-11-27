@@ -1,8 +1,6 @@
 package com.zxyt.ocpp.publish.controller.sys;
 
 import com.alibaba.fastjson.JSONObject;
-import com.zxyt.ocpp.publish.config.common.result.ResultObject;
-import com.zxyt.ocpp.publish.config.common.result.ResultResponse;
 import com.zxyt.ocpp.publish.entity.sys.ZTree;
 import com.zxyt.ocpp.publish.service.sys.IZTreeService;
 import io.swagger.annotations.*;
@@ -121,9 +119,9 @@ public class ZTreeController {
             @ApiImplicitParam(name="organizationId",value="机构ID", dataType = "String",paramType = "query")
     })
     @PostMapping("/user/group/count")
-    public ResultObject<Object> getUserGroupCountTree(@ApiParam(hidden = true) @RequestParam Map<String,Object> map) {
-        List<ZTree> userGroupTree = this.zTreeService.getUserGroupCountTree(map);
-        return ResultResponse.ok(userGroupTree);
+    public List<ZTree> getUserGroupCountTree(@ApiParam(hidden = true) @RequestParam Map<String,Object> map) {
+
+        return this.zTreeService.getUserGroupCountTree(map);
     }
 
     @ApiOperation(value = "查询机构群组树", httpMethod = "POST", notes = "根据查询条件查询机构群组树信息")
@@ -132,6 +130,10 @@ public class ZTreeController {
     })
     @PostMapping("/organization/group")
     public List<ZTree> getOrganizationUserGroupTree(@ApiParam(hidden = true) @RequestParam Map<String,Object> map) {
+        Subject subject = SecurityUtils.getSubject();
+        JSONObject json = (JSONObject) subject.getSession().getAttribute("employee");
+        map.put("areaId", json.getString("areaId"));
+        map.put("organizationId", json.getString("organizationId"));
         return this.zTreeService.getOrganizationUserGroupTree(map);
     }
 
