@@ -60,7 +60,25 @@ website:    http://code.google.com/p/jquerytree/
     color: #009688;
 }
 
-
+.ewip-upload-input{
+    width: 90%;
+    border-radius: 0!important;
+    float: left;
+}
+.ewip-upload-btn{
+    border:none;
+    height: 38px;
+    line-height: 1.3;
+    width: 10%;
+    background: #009688;
+    color:white;
+    border-radius: 0 2px 2px 0;
+    -webkit-border-radius: 0 2px 2px 0;
+    -moz-border-radius: 0 2px 2px 0;
+    -ws-border-radius: 0 2px 2px 0;
+    -o-border-radius: 0 2px 2px 0;
+    cursor: pointer;
+}
 
 /* 渠道 start*/
 .message .ocpp-card-body{

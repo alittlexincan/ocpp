@@ -88,12 +88,12 @@ layui.use(['table','form','laytpl','layer', 'selectTree', 'zTree'], function(){
                 return '请选择所属地区';
             }
         }
-        ,organizationId: function(value){
-            if(value.length == 0) {
-                $("#addOrganizationId .addOrganizationIdShow, #updateOrganizationId .updateOrganizationIdShow").css("border-color","red");
-                return '请选择所属机构';
-            }
-        }
+        // ,organizationId: function(value){
+        //     if(value.length == 0) {
+        //         $("#addOrganizationId .addOrganizationIdShow, #updateOrganizationId .updateOrganizationIdShow").css("border-color","red");
+        //         return '请选择所属机构';
+        //     }
+        // }
         ,userGroupId: function(value){
             if(value.length == 0) {
                 $("#addUserGroupId .addUserGroupIdShow, #updateUserGroupId .updateUserGroupIdShow").css("border-color","red");

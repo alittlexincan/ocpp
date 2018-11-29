@@ -46,6 +46,11 @@
                                     <input type="radio" name="record" value="1" title="是">
                                 </div>
                             </div>
+                            <div class="layui-inline ocpp-form-inline-margin">
+                                <button class="layui-btn layuiadmin-button-btn" lay-event="fileBtn" lay-filter="fileBtn">
+                                    <i class="layui-icon">&#xe601;</i>&nbsp;获取文件
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -84,7 +89,7 @@
                             <div class="layui-tab-content ocpp-tab-content">
                                 <div class="layui-tab-item layui-show">
                                     <div class="layui-card ocpp-card-content">
-                                        <div class="ocpp-content-skip">暂无受众</div>
+                                        <div class="ocpp-content-skip">请选择渠道</div>
                                     </div>
                                 </div>
                                 <!--<div class="layui-tab-item">-->
@@ -128,9 +133,6 @@
                             <div class="layui-card">
                                 <div class="layui-card-body">
                                     <div class="layui-layer-btn-c">
-                                        <button class="layui-btn layuiadmin-button-btn" lay-event="fileBtn" lay-filter="fileBtn">
-                                            <i class="layui-icon">&#xe601;</i>&nbsp;获取文件
-                                        </button>
                                         <button class="layui-btn layuiadmin-button-btn" lay-submit="submitBtn" lay-filter="submitBtn">
                                             <i class="layui-icon">&#xe609;</i>&nbsp;提交
                                         </button>

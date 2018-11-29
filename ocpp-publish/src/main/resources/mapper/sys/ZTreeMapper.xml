@@ -203,7 +203,7 @@
                 a.id,
                 a.p_id,
                 a.area_name NAME,
-                #{channelId} channel_id,
+                '' channel_id,
                 a.id area_id,
                 0 count,
                 0 type
@@ -219,7 +219,7 @@
                 o.id,
                 o.area_id p_id,
                 o.organization_name NAME,
-                #{channelId} channel_id,
+                '' channel_id,
                 o.area_id,
                 0 count,
                 1 type
@@ -248,7 +248,10 @@
                 </foreach>
             </if>
             <if test="channelId != null and channelId !=''">
-                AND ug.channel_id = #{channelId}
+                AND ug.channel_id IN
+                <foreach collection="channelId.split(',')" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
             </if>
         )
     </select>
