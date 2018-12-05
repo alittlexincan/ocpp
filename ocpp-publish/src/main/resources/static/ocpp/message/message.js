@@ -27,14 +27,7 @@ layui.use(['table','form','laydate','element','laytpl','layer','zTree','selectTr
     /**
      * 自定义验证规则
      */
-    form.verify({
-        disasterId: function(value){
-            if(value.length == 0) {
-                $("#addDisasterId .addDisasterIdShow, #updateDisasterId .updateDisasterIdShow").css("border-color","red");
-                return '请选择灾种';
-            }
-        }
-    });
+    form.verify({});
 
 
     let active = {
@@ -424,8 +417,6 @@ layui.use(['table','form','laydate','element','laytpl','layer','zTree','selectTr
         active.channelOneClick($(this));
     });
 
-
-
     /**
      * tab选项卡删除监听事件
      */
@@ -491,17 +482,40 @@ layui.use(['table','form','laydate','element','laytpl','layer','zTree','selectTr
     });
 
     /**
+     * 文件获取按钮
+     */
+    $("#fileBtn").bind("click",()=>{
+        $.ajax({
+            async:true
+            ,type: "GET"
+            ,data: {channelCode: "MESSAGE_FTP"}
+            ,url: "/message/select/file"
+            ,dataType: 'json'
+            ,success: function(result){
+                if(result.code == 200){
+                    let obj = result.data;
+                    active.editor.setContent("&nbsp;&nbsp;&nbsp;&nbsp;" + obj.data);
+                    // 回显标题
+                    $("form input[name='title']").val(obj.fileName);
+                    // 回显下拉列表数据
+                    $("form select[name='type']").val(obj.type);
+                    form.render("select");
+                }
+                layer.msg(result.msg,{time: 2000});
+            }
+        });
+    });
+
+    /**
      * 监听预警提交事件
      */
     form.on("submit(submit)", function(data){
         // 数据提交到后台，通用方法
         let param = data.field;
-
-        param.advice = "您好：" + param.title + "请您处理";     // 流程意见
-
-
+        delete  param["editorValue"];
+        param.content = active.editor.getContentTxt().trim();
         // 渠道处理
-        param.channel = function(){
+        param.channels = function(){
             let channel = [];
             $(".channel-list .imgbox.active").each(function () {
                 channel.push({
@@ -514,7 +528,7 @@ layui.use(['table','form','laydate','element','laytpl','layer','zTree','selectTr
         }();
 
         // 地区处理
-        param.area = function(){
+        param.areas = function(){
             let area = [];
             initAreaTree.getCheckedNodes(true).forEach(function (item) {
                 area.push({
@@ -527,41 +541,45 @@ layui.use(['table','form','laydate','element','laytpl','layer','zTree','selectTr
         }();
 
         // 群组处理
-        param.group = function(){
+        param.groups = function(){
             let group = {};
             $(".channel-list .imgbox.active").each(function () {
-                var channelId = $(this).data("id")
+                let channelId = $(this).data("id")
                     ,channelGroup = [];
                 zTree.getZTree("group_"+channelId).getCheckedNodes(true).forEach(function (item) {
-                    channelGroup.push({
-                        userGroupId: item.id,
-                        userGroupName: item.name
-                    });
+                    if(item.type==2){
+                        channelGroup.push({
+                            userGroupId: item.id,
+                            userGroupName: item.name
+                        });
+                    }
                 });
                 group[channelId] = channelGroup;
             });
             return JSON.stringify(group).replace(/\"/g,"'");
         }();
 
-
-
         // 数据提交
-        // ajaxFileUpload.render({
-        //     async: true
-        //     ,url : "/warn/edit/insert"
-        //     ,type: "POST"
-        //     ,param : param//需要传递的数据 json格式
-        //     ,files : files()
-        //     ,dataType: 'json'
-        // },function (json) {
-        //     if(json.code == 200){
-        //         // 弹出提示信息，2s后自动关闭
-        //         layer.msg(json.msg, {time: 2000},function(){
-        //             location.reload();
-        //         });
-        //     }
-        // });
+        ajaxFileUpload.render({
+            async: true
+            ,url : "/message/insert"
+            ,type: "POST"
+            ,param : param//需要传递的数据 json格式
+            ,files : []
+            ,dataType: 'json'
+        },function (json) {
+            if(json.code == 200){
+                // 弹出提示信息，2s后自动关闭
+                layer.msg(json.msg, {time: 2000},function(){
+                    location.reload();
+                });
+            }
+        });
 
+    });
+
+    $("form button[type='reset']").bind("click", function () {
+        initAreaTree.refresh();
     });
 
     /**

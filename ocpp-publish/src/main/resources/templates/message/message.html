@@ -22,13 +22,13 @@
                             <div class="layui-inline ocpp-form-inline-width">
                                 <label class="layui-form-label">发布标题</label>
                                 <div class="layui-input-inline ocpp-input-inline-width">
-                                    <input type="text" id="title" name="title" lay-verify="required" placeholder="请输入发布文件标题" autocomplete="off" class="layui-input">
+                                    <input type="text" name="title" placeholder="请输入发布文件标题" readonly autocomplete="off" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-inline ocpp-form-inline-margin">
                                 <label class="layui-form-label">文件类型</label>
                                 <div class="layui-input-inline">
-                                    <select  name="disasterColor" lay-verify="required" placeholder="请选择文件类型">
+                                    <select  name="type" disabled placeholder="请选择文件类型">
                                         <option value="">请选择文件类型</option>
                                         <option value="0">短期预报</option>
                                         <option value="1">中期预报</option>
@@ -47,7 +47,7 @@
                                 </div>
                             </div>
                             <div class="layui-inline ocpp-form-inline-margin">
-                                <button class="layui-btn layuiadmin-button-btn" lay-event="fileBtn" lay-filter="fileBtn">
+                                <button class="layui-btn layuiadmin-button-btn" id="fileBtn">
                                     <i class="layui-icon">&#xe601;</i>&nbsp;获取文件
                                 </button>
                             </div>
@@ -133,12 +133,12 @@
                             <div class="layui-card">
                                 <div class="layui-card-body">
                                     <div class="layui-layer-btn-c">
-                                        <button class="layui-btn layuiadmin-button-btn" lay-submit="submitBtn" lay-filter="submitBtn">
+                                        <button class="layui-btn layuiadmin-button-btn" lay-submit="submit" lay-filter="submit">
                                             <i class="layui-icon">&#xe609;</i>&nbsp;提交
                                         </button>
-                                        <button class="layui-btn layui-btn-danger" type="reset">
-                                            <i class="layui-icon">&#xe669;</i>&nbsp;重置
-                                        </button>
+                                        <!--<button class="layui-btn layui-btn-danger" type="reset">-->
+                                            <!--<i class="layui-icon">&#xe669;</i>&nbsp;重置-->
+                                        <!--</button>-->
                                     </div>
                                 </div>
                             </div>

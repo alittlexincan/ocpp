@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxyt.ocpp.publish.mapper.message.IMessageMapper">
+
+    <resultMap id="BaseResultMap" type="com.zxyt.ocpp.publish.entity.message.Message">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="area_id" jdbcType="VARCHAR" property="areaId"/>
+        <result column="area_name" jdbcType="VARCHAR" property="areaName"/>
+        <result column="organization_id" jdbcType="VARCHAR" property="organizationId"/>
+        <result column="organization_name" jdbcType="VARCHAR" property="organizationName"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="record" jdbcType="INTEGER" property="record"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+
+    <!-- 查询地区信息 -->
+    <select id="findAll" resultMap="BaseResultMap">
+
+    </select>
+
+</mapper>
