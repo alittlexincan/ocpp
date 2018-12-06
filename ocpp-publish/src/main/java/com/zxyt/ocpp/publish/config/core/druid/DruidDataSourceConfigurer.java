@@ -82,11 +82,11 @@ public class DruidDataSourceConfigurer {
     @Value("${spring.datasource.druid.connectionProperties}")
     private String connectionProperties;
 
-    @Value("${logging.level.com.zxyt.ocpp.publish}")
-    private String loggingLevel;
-
-    @Value("${logging.file}")
-    private String loggingFile;
+//    @Value("${logging.level.com.zxyt.ocpp.publish}")
+//    private String loggingLevel;
+//
+//    @Value("${logging.file}")
+//    private String loggingFile;
 
     @Bean
     public DataSource getDataSource() {

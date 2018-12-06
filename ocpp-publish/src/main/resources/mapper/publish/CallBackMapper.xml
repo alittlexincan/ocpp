@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxyt.ocpp.publish.mapper.publish.ICallBackMapper">
+
+    <!-- 回执状态插入主表信息 -->
+    <insert id="insertMainMsg" >
+        insert into message_callback_main (id, message_id, channel_code, total, success, fail, work, create_time )
+        value
+        ( REPLACE(UUID(),'-',''), #{messageId}, #{channelCode}, #{total}, #{success}, #{fail}, #{work}, now())
+
+    </insert>
+
+    <!-- 回执状态插入子表信息 -->
+    <insert id="insertChildMsg" >
+        insert into message_callback_child (id, message_id, channel_code, code, status, create_time )
+        values
+        <foreach collection="list" item="item" separator=",">
+            ( REPLACE(UUID(),'-',''), #{item.messageId}, #{item.channelCode}, #{item.code}, #{item.status}, now())
+        </foreach>
+    </insert>
+
+</mapper>
