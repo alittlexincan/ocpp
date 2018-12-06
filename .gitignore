@@ -8,3 +8,4 @@
 out
 gen
 .mvn
+/ocpp-eureka/.gitignore
