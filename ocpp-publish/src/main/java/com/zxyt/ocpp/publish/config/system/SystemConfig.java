@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Configuration
 @PropertySources({
-        @PropertySource(value = {"file:D:/ocpp/config/system.properties"},ignoreResourceNotFound=true,encoding = "UTF-8")
+        @PropertySource(value = {"file:D:/ocpp/config/ocpp-publish.properties"},ignoreResourceNotFound=true,encoding = "UTF-8")
 })
 public class SystemConfig {
 

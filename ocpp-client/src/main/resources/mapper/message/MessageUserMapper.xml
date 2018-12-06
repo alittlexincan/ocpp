@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxyt.ocpp.client.mapper.message.IMessageUserMapper">
+
+    <resultMap id="BaseResultMap" type="com.zxyt.ocpp.client.entity.message.MessageUser">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="message_id" jdbcType="VARCHAR" property="messageId"/>
+        <result column="channel_id" jdbcType="VARCHAR" property="channelId"/>
+        <result column="user_group_id" jdbcType="VARCHAR" property="userGroupId"/>
+        <result column="user_group_name" jdbcType="VARCHAR" property="userGroupName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+
+    <insert id="insertBatch">
+        insert into message_user (id, message_id, channel_id, user_group_id, user_group_name, create_time )
+        values
+        <foreach collection="list" item="item" separator=",">
+            ( REPLACE(UUID(),'-',''), #{item.messageId}, #{item.channelId}, #{item.userGroupId}, #{item.userGroupName}, now())
+        </foreach>
+    </insert>
+</mapper>
