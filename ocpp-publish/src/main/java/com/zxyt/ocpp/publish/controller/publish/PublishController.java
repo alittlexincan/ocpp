@@ -49,22 +49,19 @@ public class PublishController {
 
     /**
      * 渠道发布
-     * @param map
+     * @param json
      */
     @PostMapping("/")
-    public void publish(@RequestBody Map<String, Object> map){
-
-        JSONObject json = new JSONObject(map);
+    public void publish(@RequestBody JSONObject json){
         log.info("接收推送数据：" + json.toJSONString());
-
-        JSONArray channelArray = json.getJSONArray("channel");
+        JSONArray channelArray = json.getJSONArray("channels");
         for(int i = 0; i<channelArray.size(); i++){
             // 获取渠道编码
             String code = channelArray.getJSONObject(i).getString("channelCode");
             // 短信
-            if(code.equals("SMS")) this.smsService.sms(setParam(json, "SMS"));
+            if(code.equals("SMS")) this.smsService.sms(json);
             // 微信
-            if(code.equals("WECHAT")) this.wechatService.wechat(setParam(json, "WECHAT"));
+            if(code.equals("WECHAT")) this.wechatService.wechat(json);
         }
 
         // 如果record国突标识为1，则需要对接国突
@@ -77,28 +74,4 @@ public class PublishController {
         }
     }
 
-
-    /**
-     * 提取当前渠道下对应的预警内容等信息
-     * @param json
-     * @param code
-     * @return
-     */
-    private JSONObject setParam(JSONObject json, String code){
-        JSONObject result = JSON.parseObject(json.toJSONString());
-        JSONObject currentContent = new JSONObject();
-        JSONArray channels = result.getJSONArray("channel");
-        JSONObject content = result.getJSONObject("content");
-        for(int i = 0; i<channels.size(); i++){
-            JSONObject channel = channels.getJSONObject(i);
-            if(channel.getString("channelCode").equals(code)) {
-                currentContent = content.getJSONArray(channel.getString("channelId")).getJSONObject(0);
-                break;
-            }
-        }
-        result.remove("channel");
-        result.remove("content");
-        result.put("content",currentContent);
-        return result;
-    }
 }

@@ -3,6 +3,8 @@ package com.zxyt.ocpp.publish.service.impl.sms;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.xincan.utils.md5.MD5Util;
+import com.zxyt.ocpp.publish.entity.ChannelConfig;
+import com.zxyt.ocpp.publish.mapper.channel.IChannelConfigMapper;
 import com.zxyt.ocpp.publish.mapper.publish.ICallBackMapper;
 import com.zxyt.ocpp.publish.service.sms.ISmsService;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +13,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -24,56 +29,47 @@ import org.springframework.web.client.RestTemplate;
 public class SmsServiceImpl implements ISmsService {
 
 
-    @Value("${sms.ec.name}")
     private String ecName;
 
-    @Value("${sms.user.name}")
     private String userName;
 
-    @Value("${sms.user.password}")
     private String userPassword;
 
-    /**
-     * 短信发送签名
-     */
-    @Value("${sms.sign}")
+    // 短信发送签名
     private String sign;
 
-    /**
-     * 短信授权用户名称
-     */
-    @Value("${sms.http.authorize.user.name}")
+    // 短信授权用户名称
     private String authorizeUserName;
 
-    /**
-     * 短信授权用户密码
-     */
-    @Value("${sms.http.authorize.user.password}")
+    // 短信授权用户密码
     private String authorizeUserPassword;
 
-    /**
-     * 短信授权接口调用URL
-     */
-    @Value("${sms.authorize.url}")
+    // 短信授权接口调用URL
     private String authorizeUrl;
 
-    /**
-     * 短信发送接口调用URL
-     */
-    @Value("${sms.send.url}")
+    // 短信发送接口调用URL
     private String sendUrl;
 
-    /**
-     * 每批次发送条数(云MAS平台要求上限不超过200条每批次)
-     */
-    @Value("${sms.number}")
+    // 每批次发送条数(云MAS平台要求上限不超过200条每批次)
     private Integer number;
 
+    /**
+     * 注入rest API访问
+     */
     @Autowired
     private RestTemplate restTemplate;
 
+    /**
+     * 注入回显数据访问层
+     */
     @Autowired
     private ICallBackMapper callBackMapper;
+
+    /**
+     * 注入渠道配置信息
+     */
+    @Autowired
+    private IChannelConfigMapper channelConfigMapper;
 
     /**
      * 短信发送
@@ -88,20 +84,24 @@ public class SmsServiceImpl implements ISmsService {
 
         // 存储发送结果主表信息
         JSONObject main = new JSONObject();
-        // 1：解析数据
+
+        // 1：读取短信配置信息
+        readSMSConfigInfo(json);
+
+        // 2：解析数据
         JSONObject sendMessage = setMessage(json);
-        // 获取发送用户
+        // 3：获取发送用户
         JSONArray userArray = sendMessage.getJSONArray("userArray");
-        // 获取发送内容
+        // 4：获取发送内容
         String content = sendMessage.getString("content");
-        // 2：短信发送授权获取mas_user_id用户登录id
+        // 5：短信发送授权获取mas_user_id用户登录id
         String authorizeUrl = this.authorizeUrl + "?ec_name=" + this.ecName + "&user_name=" + this.authorizeUserName + "&user_passwd=" + this.authorizeUserPassword;
         log.info("短信授权URL：【" + authorizeUrl + "】");
         JSONObject authorize = this.restTemplate.getForObject(authorizeUrl,JSONObject.class);
         log.info("短信授权返回信息：【" + authorizeUrl +"】");
-        // 获取用户登录ID
+        // 6：获取用户登录ID
         String mas_user_id = authorize.getString("mas_user_id");
-        // 获取access_token
+        // 7：获取access_token
         String access_token = authorize.getString("access_token");
         if(mas_user_id == null){
             log.info("短信发送授权失败");
@@ -176,10 +176,8 @@ public class SmsServiceImpl implements ISmsService {
             this.callBackMapper.insertMainMsg(main);
             // 插入回执状态字表信息
             this.callBackMapper.insertChildMsg(childArray);
-
         }
     }
-
 
     /**
      * 短信发送
@@ -202,6 +200,36 @@ public class SmsServiceImpl implements ISmsService {
     }
 
     /**
+     * 读取短信配置信息并设置全局参数信息
+     * @param json
+     */
+    private void readSMSConfigInfo(JSONObject json){
+        try{
+            Map<String, Object> map = new HashMap<>();
+            map.put("areaId", json.getString("areaId"));
+            map.put("organizationId", json.getString("organizationId"));
+            map.put("channelCode", "SMS");
+            // 读取短信配置信息
+            ChannelConfig config = this.channelConfigMapper.selectChannelConfig(map);
+            // 全局赋值
+            JSONObject cc = JSONObject.parseObject(config.getContent());
+            this.ecName = cc.getString("organizationName");                       // 平台机构名称
+            this.userName = cc.getString("loginName");                            // 平台登录名称
+            this.userPassword = cc.getString("loginPassword");                    // 平台登录密码
+            this.sign = cc.getString("sign");                                     // 短信发送签名
+            this.authorizeUserName = cc.getString("authorizeUserName");           // 短信授权用户名称
+            this.authorizeUserPassword = cc.getString("authorizeUserPassword");   // 短信授权用户密码
+            this.authorizeUrl = cc.getString("authorizeUrl");                     // 短信授权接口调用URL
+            this.sendUrl = cc.getString("smsSendUrl");                            // 短信发送接口调用URL
+            this.number = cc.getInteger("smsNumber");                             // 每批次发送条数(云MAS平台要求上限不超过200条每批次)
+            log.info("获取短信配置信息成功");
+        }catch (Exception e){
+            log.error("获取短信配置信息失败");
+        }
+
+    }
+
+    /**
      * 获取短信发送信息和受众
      * @param param
      * @return
@@ -209,15 +237,15 @@ public class SmsServiceImpl implements ISmsService {
     private JSONObject setMessage(JSONObject param){
         JSONObject result = new JSONObject();
         // 获取发送内容
-        String content = param.getJSONObject("content").getString("content");
+        String content = param.getString("content");
         // 获取发送受众
-        JSONObject user = param.getJSONObject("user");
+        JSONObject user = param.getJSONObject("users");
         JSONArray array = new JSONArray();
         for (String u : user.keySet()) {
             user.getJSONArray(u).forEach( us ->{
-                JSONObject j = (JSONObject) us;
-                if(j.getString("channelCode").equals("SMS")){
-                    array.add(j.getString("userCode"));
+                JSONObject json = (JSONObject) us;
+                if(json.getString("channelCode").equals("SMS")){
+                    array.add(json.getString("userCode"));
                 }
             });
         }

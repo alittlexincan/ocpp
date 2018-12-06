@@ -571,7 +571,7 @@ layui.use(['table','form','laydate','element','laytpl','layer','zTree','selectTr
             if(json.code == 200){
                 // 弹出提示信息，2s后自动关闭
                 layer.msg(json.msg, {time: 2000},function(){
-                    location.reload();
+                    // location.reload();
                 });
             }
         });

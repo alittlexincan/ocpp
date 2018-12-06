@@ -27,9 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @Author: JiangXincan
@@ -110,6 +109,9 @@ public class MessageServiceImpl extends AbstractService<Message> implements IMes
         addMessageAreaBindChannel(json, messageId);    // 3：添加一键发布内容信息
         addMessageUser(json, messageId);               // 4：添加一键发布群组信息
 
+        getMessageUserInfo(json, messageId);
+
+        json.put("id", messageId);
         if(!StringUtils.isEmpty(messageId)){
             json.put("code", 200);
             json.put("msg","一键发布成功");
@@ -203,6 +205,63 @@ public class MessageServiceImpl extends AbstractService<Message> implements IMes
             }
         }
         return this.messageUserMapper.insertBatch(list);
+    }
+
+
+    /**
+     * 根据id获取预警发布对象信息
+     * @param result
+     * @param messageId
+     * @return
+     */
+    private void getMessageUserInfo(JSONObject result, String messageId){
+        Map<String, Object> map = new HashMap<>();
+        map.put("messageId", messageId);
+        List<MessageUser> list = this.messageUserMapper.selectByMessageId(map);
+        if(list.size() > 0){
+            // 组装渠道下的群组，一个渠道可能对应多个群组
+            JSONObject group = new JSONObject();
+            // 组装渠道下的用户，一个群组可能对应多个用户
+            JSONObject user = new JSONObject();
+            // 渠道去重
+            Map<String, List<MessageUser>> groupList = list.stream().collect(Collectors.groupingBy(MessageUser::getChannelId));
+            list.forEach(weu -> {
+                // 群组过滤不必要字段
+                JSONArray groupArray = new JSONArray();
+                // 渠道对应的群组去重
+                groupList.get(weu.getChannelId()).stream().collect(Collectors.collectingAndThen(
+                        Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(o -> o.getChannelId() + ";" + o.getUserGroupId()))),
+                        ArrayList::new
+                )).forEach( gr -> {
+                    JSONObject g = new JSONObject();
+                    g.put("userGroupId", gr.getUserGroupId());
+                    g.put("userGroupName", gr.getUserGroupName());
+                    groupArray.add(g);
+                });
+                // 用户过滤不必要字段
+                JSONArray userGroupArray = new JSONArray();
+                // 组装群组下的受众
+                list.stream()
+                        .filter(p -> p.getUserCode() != null && p.getUserGroupId().equals(weu.getUserGroupId()))
+                        .collect(Collectors.toList())
+                        .forEach(ug -> {
+                            JSONObject g = new JSONObject();
+                            g.put("userName", ug.getUserName());
+                            g.put("userCode", ug.getUserCode());
+                            g.put("channelCode", ug.getChannelCode());
+                            g.put("longitude", ug.getLongitude());
+                            g.put("latitude", ug.getLatitude());
+                            g.put("altitude", ug.getAltitude());
+                            userGroupArray.add(g);
+                        });
+                // 在当前渠道下追加群组
+                group.put(weu.getChannelId(), groupArray);
+                // 当前群组下追加受众用户
+                user.put(weu.getUserGroupId(), userGroupArray);
+            });
+            result.put("users", user);
+            result.put("groups", group);
+        }
     }
 
 

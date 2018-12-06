@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.zxyt.ocpp.client.config.common.result.ResultObject;
 import com.zxyt.ocpp.client.config.common.result.ResultResponse;
 import com.zxyt.ocpp.client.service.message.IMessageService;
+import com.zxyt.ocpp.client.service.publish.IPublishService;
 import io.swagger.annotations.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -23,8 +24,17 @@ import java.util.Map;
 @RequestMapping("/message")
 public class MessageController {
 
+    /**
+     * 注入消息处理接口
+     */
     @Autowired
     private IMessageService messageService;
+
+    /**
+     * 注入分发平台接口
+     */
+    @Autowired
+    private IPublishService publishService;
 
 
     @ApiOperation(value = "获取文件信息", httpMethod = "GET", notes = "根据FTP类型下载FTP上最新文件下载到本地制定路径，然后读取文件内容")
@@ -62,7 +72,10 @@ public class MessageController {
         JSONObject result = this.messageService.insert(map);
         if(result.getInteger("code") == 200){
 
+            System.out.println(result);
+
             // 调用分发接口
+            this.publishService.publish(result);
 
             return ResultResponse.make(200,result.getString("msg"), result);
         }

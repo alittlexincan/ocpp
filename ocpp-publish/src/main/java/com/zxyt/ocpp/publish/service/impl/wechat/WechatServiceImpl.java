@@ -112,10 +112,8 @@ public class WechatServiceImpl implements IWechatService {
             result = this.sendWarnTemplate(json, accessToken);
         }
 
-
         // 插入回执状态主表信息
         this.callBackMapper.insertMainMsg(result);
-
 
     }
 

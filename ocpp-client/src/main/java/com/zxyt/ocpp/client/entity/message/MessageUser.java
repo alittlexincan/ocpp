@@ -2,6 +2,10 @@ package com.zxyt.ocpp.client.entity.message;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -13,6 +17,10 @@ import java.util.Date;
  * @Version 1.0
  **/
 @ApiModel(value = "MessageUser",description = "一键发布接收用户信息")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @Table(name = "message_user")
 public class MessageUser {
 
@@ -37,62 +45,17 @@ public class MessageUser {
     @Column(name = "create_time")
     private Date createTime;
 
-    public MessageUser() {
-    }
+    private String userName;
 
-    public MessageUser(String messageId, String channelId, String userGroupId, String userGroupName, Date createTime) {
-        this.messageId = messageId;
-        this.channelId = channelId;
-        this.userGroupId = userGroupId;
-        this.userGroupName = userGroupName;
-        this.createTime = createTime;
-    }
+    private String userCode;
 
-    public String getId() {
-        return id;
-    }
+    private Double longitude;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    private Double latitude;
 
-    public String getMessageId() {
-        return messageId;
-    }
+    private Double altitude;
 
-    public void setMessageId(String messageId) {
-        this.messageId = messageId;
-    }
+    private String channelName;
 
-    public String getChannelId() {
-        return channelId;
-    }
-
-    public void setChannelId(String channelId) {
-        this.channelId = channelId;
-    }
-
-    public String getUserGroupId() {
-        return userGroupId;
-    }
-
-    public void setUserGroupId(String userGroupId) {
-        this.userGroupId = userGroupId;
-    }
-
-    public String getUserGroupName() {
-        return userGroupName;
-    }
-
-    public void setUserGroupName(String userGroupName) {
-        this.userGroupName = userGroupName;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+    private String channelCode;
 }

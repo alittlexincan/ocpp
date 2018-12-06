@@ -34,6 +34,9 @@ layui.use(["table","element","form","laytpl","layer","selectTree"], function(){
         ,authorizeUserPassword: value => {
             if(value.length == 0) return '请输入云MAS授权接口用户密码';
         }
+        ,sign : value => {
+            if(value.length == 0) return '请输入短信签名码';
+        }
         ,authorizeUrl: value => {
             if(value.length == 0) return '请输入云MAS授权接口路径';
         }
@@ -76,7 +79,7 @@ layui.use(["table","element","form","laytpl","layer","selectTree"], function(){
         ,initChannelInfo: () => {
             active.getData({
                 type: "POST",
-                data: {type:"SMS"},
+                data: {channelCode : "SMS", type:"MAS"},
                 url: "/channel/config/select/type"
             }, result => {
                 if(result.code == 200){

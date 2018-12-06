@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxyt.ocpp.publish.mapper.channel.IChannelConfigMapper">
+
+    <resultMap id="BaseResultMap" type="com.zxyt.ocpp.publish.entity.ChannelConfig">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="channel_code" jdbcType="VARCHAR" property="channelCode"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="area_id" jdbcType="VARCHAR" property="areaId"/>
+        <result column="organization_id" jdbcType="VARCHAR" property="organizationId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+
+    <!-- 回执状态插入主表信息 -->
+    <select id="selectChannelConfig" resultMap="BaseResultMap">
+        SELECT  content  FROM channel_config where area_id = #{areaId} and organization_id = #{organizationId} and channel_code = #{channelCode}
+    </select>
+</mapper>

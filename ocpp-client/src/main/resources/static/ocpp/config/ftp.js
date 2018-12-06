@@ -67,7 +67,7 @@ layui.use(["table","element","form","laytpl","layer","selectTree"], function(){
         ,initChannelInfo: () => {
             active.getData({
                 type: "POST",
-                data: {type:"MESSAGE_FTP"},
+                data: {channelCode:"MESSAGE_FTP"},
                 url: "/channel/config/select/type"
             }, result => {
                 if(result.code == 200){

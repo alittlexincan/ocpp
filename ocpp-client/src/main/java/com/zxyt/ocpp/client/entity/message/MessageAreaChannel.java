@@ -2,6 +2,10 @@ package com.zxyt.ocpp.client.entity.message;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -13,6 +17,10 @@ import java.util.Date;
  * @Version 1.0
  **/
 @ApiModel(value = "MessageAreaChannel",description = "一键发布信息关联地区和渠道")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @Table(name = "message_area_channel")
 public class MessageAreaChannel {
 
@@ -34,53 +42,4 @@ public class MessageAreaChannel {
     @Column(name = "create_time")
     private Date createTime;
 
-    public MessageAreaChannel() {
-    }
-
-    public MessageAreaChannel(String messageId, String channelId, String areaId, Date createTime) {
-        this.messageId = messageId;
-        this.channelId = channelId;
-        this.areaId = areaId;
-        this.createTime = createTime;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getMessageId() {
-        return messageId;
-    }
-
-    public void setMessageId(String messageId) {
-        this.messageId = messageId;
-    }
-
-    public String getChannelId() {
-        return channelId;
-    }
-
-    public void setChannelId(String channelId) {
-        this.channelId = channelId;
-    }
-
-    public String getAreaId() {
-        return areaId;
-    }
-
-    public void setAreaId(String areaId) {
-        this.areaId = areaId;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
 }

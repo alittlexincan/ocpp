@@ -11,6 +11,21 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
     </resultMap>
 
+    <resultMap id="BaseUserResultMap" type="com.zxyt.ocpp.client.entity.message.MessageUser">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="user_code" jdbcType="VARCHAR" property="userCode"/>
+        <result column="channel_id" jdbcType="VARCHAR" property="channelId"/>
+        <result column="user_group_id" jdbcType="VARCHAR" property="userGroupId"/>
+        <result column="longitude" jdbcType="DOUBLE" property="longitude"/>
+        <result column="latitude" jdbcType="DOUBLE" property="latitude"/>
+        <result column="altitude" jdbcType="DOUBLE" property="altitude"/>
+        <result column="channel_name" jdbcType="VARCHAR" property="channelName"/>
+        <result column="channel_code" jdbcType="VARCHAR" property="channelCode"/>
+        <result column="user_group_name" jdbcType="VARCHAR" property="userGroupName"/>
+    </resultMap>
+
+    <!--批量插入群组信息-->
     <insert id="insertBatch">
         insert into message_user (id, message_id, channel_id, user_group_id, user_group_name, create_time )
         values
@@ -18,4 +33,25 @@
             ( REPLACE(UUID(),'-',''), #{item.messageId}, #{item.channelId}, #{item.userGroupId}, #{item.userGroupName}, now())
         </foreach>
     </insert>
+
+    <select id="selectByMessageId" resultMap="BaseUserResultMap">
+        SELECT
+            u.id,
+            u. NAME user_name,
+            u. CODE user_code,
+            u.longitude,
+            u.latitude,
+            u.altitude,
+            mu.channel_id,
+            c. NAME channel_name,
+            c. CODE channel_code,
+            mu.user_group_id,
+            mu.user_group_name
+        FROM
+            message_user mu
+        LEFT JOIN user u on mu.user_group_id = u.user_group_id
+        LEFT JOIN channel c on c.id = mu.channel_id
+        where mu.message_id = #{messageId}
+    </select>
+
 </mapper>
