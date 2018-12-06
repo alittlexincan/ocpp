@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public interface IMessageService  extends IBaseService<Message> {
 
-    Message insert(Map<String, Object> map);
+    JSONObject insert(Map<String, Object> map);
 
     /**
      * 获取文件信息

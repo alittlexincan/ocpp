@@ -3,7 +3,6 @@ package com.zxyt.ocpp.publish.controller.message;
 import com.alibaba.fastjson.JSONObject;
 import com.zxyt.ocpp.publish.config.common.result.ResultObject;
 import com.zxyt.ocpp.publish.config.common.result.ResultResponse;
-import com.zxyt.ocpp.publish.entity.message.Message;
 import com.zxyt.ocpp.publish.service.message.IMessageService;
 import io.swagger.annotations.*;
 import org.apache.shiro.SecurityUtils;
@@ -60,16 +59,14 @@ public class MessageController {
     })
     @PostMapping(value = "/insert")
     public ResultObject<Object> insert(@ApiParam(hidden = true) @RequestParam Map<String, Object> map) {
-        Subject subject = SecurityUtils.getSubject();
-        JSONObject employee = (JSONObject) subject.getSession().getAttribute("employee");
-        map.put("areaId", employee.getString("areaId"));
-        map.put("organizationId", employee.getString("organizationId"));
+        JSONObject result = this.messageService.insert(map);
+        if(result.getInteger("code") == 200){
 
-        Message warnEdit = this.messageService.insert(map);
-        if(warnEdit.getId() != null){
-            return ResultResponse.make(200,"添加预警信息成功",map);
+            // 调用分发接口
+
+            return ResultResponse.make(200,result.getString("msg"), result);
         }
-        return ResultResponse.make(500,"添加预警信息失败",null);
+        return ResultResponse.make(500,result.getString("msg"),null);
     }
 
 }

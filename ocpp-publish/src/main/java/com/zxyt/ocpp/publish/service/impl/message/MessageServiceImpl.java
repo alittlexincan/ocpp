@@ -19,9 +19,12 @@ import com.zxyt.ocpp.publish.mapper.sys.IChannelConfigMapper;
 import com.zxyt.ocpp.publish.service.message.IMessageService;
 import com.zxyt.ocpp.publish.utils.MessageTypeUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -75,7 +78,17 @@ public class MessageServiceImpl extends AbstractService<Message> implements IMes
      */
     @Override
     @Transactional
-    public Message insert(Map<String, Object> map) {
+    public JSONObject insert(Map<String, Object> map) {
+
+        Subject subject = SecurityUtils.getSubject();
+        JSONObject employee = (JSONObject) subject.getSession().getAttribute("employee");
+        map.put("employeeId",employee.getString("employeeId"));
+        map.put("employeeName",employee.getString("employeeName"));
+        map.put("areaId", employee.getString("areaId"));
+        map.put("areaName", employee.getString("areaName"));
+        map.put("organizationId",employee.getString("organizationId"));
+        map.put("organizationName",employee.getString("organizationName"));
+        map.put("organizationCode",map.get("organizationCode"));
 
         // 转换接收信息
         JSONObject json = new JSONObject(map);
@@ -93,11 +106,18 @@ public class MessageServiceImpl extends AbstractService<Message> implements IMes
         json.put("groups",group);
 
         Message message = addMessage(json);             // 1：添加一键发布基本信息
-        String warnEditId = message.getId();            // 2：预警基础信息ID
-        addMessageAreaBindChannel(json, warnEditId);    // 3：添加一键发布内容信息
-        addMessageUser(json, warnEditId);               // 4：添加一键发布群组信息
+        String messageId = message.getId();            // 2：预警基础信息ID
+        addMessageAreaBindChannel(json, messageId);    // 3：添加一键发布内容信息
+        addMessageUser(json, messageId);               // 4：添加一键发布群组信息
 
-        return message;
+        if(!StringUtils.isEmpty(messageId)){
+            json.put("code", 200);
+            json.put("msg","一键发布成功");
+            return json;
+        }
+        json.put("code", 500);
+        json.put("msg","一键发布失败");
+        return json;
     }
 
     /**
