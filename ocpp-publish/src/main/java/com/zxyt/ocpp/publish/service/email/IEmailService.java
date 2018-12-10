@@ -9,8 +9,8 @@ import com.alibaba.fastjson.JSONObject;
  */
 public interface IEmailService {
     /**
-     * 产品发布
+     * 邮件发布
      * @param json
      */
-    void sendEmail(JSONObject json);
+    void email(JSONObject json);
 }

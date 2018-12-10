@@ -13,6 +13,17 @@
 
     <!-- 回执状态插入主表信息 -->
     <select id="selectChannelConfig" resultMap="BaseResultMap">
-        SELECT  content  FROM channel_config where area_id = #{areaId} and organization_id = #{organizationId} and channel_code = #{channelCode}
+        SELECT  content  FROM channel_config where 1=1
+        <if test="areaId != null and areaId != ''">
+            and area_id = #{areaId}
+        </if>
+        <if test="organizationId != null and organizationId != ''">
+            and organization_id = #{organizationId}
+        </if>
+        <if test="channelCode != null and channelCode != ''">
+            and channel_code = #{channelCode}
+        </if>
+
+
     </select>
 </mapper>

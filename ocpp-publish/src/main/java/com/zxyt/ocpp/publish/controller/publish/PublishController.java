@@ -3,6 +3,7 @@ package com.zxyt.ocpp.publish.controller.publish;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.zxyt.ocpp.publish.service.email.IEmailService;
 import com.zxyt.ocpp.publish.service.record.IRecordService;
 import com.zxyt.ocpp.publish.service.sms.ISmsService;
 import com.zxyt.ocpp.publish.service.wechat.IWechatService;
@@ -41,6 +42,12 @@ public class PublishController {
     private IWechatService wechatService;
 
     /**
+     * 发布渠道：对接邮件接口
+     */
+    @Autowired
+    private IEmailService emailService;
+
+    /**
      * 国突平台对接接口
      */
     @Autowired
@@ -62,6 +69,8 @@ public class PublishController {
             if(code.equals("SMS")) this.smsService.sms(json);
             // 微信
             if(code.equals("WECHAT")) this.wechatService.wechat(json);
+            // 微信
+            if(code.equals("EMAIL")) this.emailService.email(json);
         }
 
         // 如果record国突标识为1，则需要对接国突

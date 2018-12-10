@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title>邮件配置</title>
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link rel="stylesheet" th:href="@{/static/layuiadmin/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuiadmin/style/admin.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/css/ocpp.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuiadmin/layui/alibaba/css/iconfont.css}" media="all">
+
+</head>
+<body>
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card-header"><span>&nbsp;&nbsp;<i class="iconfont icon-duanxin warn-card-hader-icon"></i>FTP配置</span></div>
+            <div class="layui-card-body">
+                <form action="javascript:;" class="layui-form layui-form-pane layui-tab-item layui-show" lay-filter="form-filter">
+
+                    <input type="hidden" name="type" value="EMAIL">
+
+                    <blockquote class="layui-elem-quote layui-text">
+                        <p><span class="layui-badge-dot"></span>&nbsp;邮件配置对接发布渠道
+                    </blockquote>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">邮件协议</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="host" lay-verify="host" autocomplete="off" placeholder="请输入邮件协议地址如：smtp.163.com" class="layui-input" />
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">邮件端口</label>
+                        <div class="layui-input-block">
+                            <input type="number" name="port" lay-verify="port" value="" autocomplete="off" placeholder="请输入邮件协议端口" class="layui-input" />
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">用户名称</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="userName" lay-verify="userName" autocomplete="off" placeholder="请输入用户名称" class="layui-input" />
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">用户密码</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="password" lay-verify="password" autocomplete="off" placeholder="请输入用户密码" class="layui-input" />
+                        </div>
+                    </div>
+
+                    <div class="layui-layer-btn-c">
+                        <button class="layui-btn layuiadmin-button-btn" lay-submit="submitBtn" lay-filter="submitBtn">
+                            <i class="layui-icon">&#xe609;</i>&nbsp;提交
+                        </button>
+                        <button class="layui-btn layui-btn-danger" type="reset">
+                            <i class="layui-icon">&#xe669;</i>&nbsp;重置
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/static/layuiadmin/layui/layui.js}" ></script>
+    <script th:src="@{/static/ocpp/config/email.js}" charset="utf-8"></script>
+
+</body>
+</html>
