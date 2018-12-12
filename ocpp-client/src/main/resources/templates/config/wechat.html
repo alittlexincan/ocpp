@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title>微信配置</title>
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link rel="stylesheet" th:href="@{/static/layuiadmin/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuiadmin/style/admin.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/css/ocpp.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/layuiadmin/layui/alibaba/css/iconfont.css}" media="all">
+    <style>
+        .layui-form-pane .layui-form-label{
+            width:180px;
+        }
+        .layui-form-pane .layui-input-block {
+            margin-left: 180px;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header"><span>&nbsp;&nbsp;<i class="iconfont icon-duanxin warn-card-hader-icon"></i>微信配置</span></div>
+        <div class="layui-card-body">
+            <form action="javascript:;" class="layui-form layui-form-pane layui-tab-item layui-show" lay-filter="form-filter">
+
+                <input type="hidden" name="type" value="WECHAT">
+
+                <blockquote class="layui-elem-quote layui-text">
+                    <p><span class="layui-badge-dot"></span>&nbsp;<span class="ocpp-font-color">[微信应用ID]</span>微信公众平台申请开发者账号之后得到的APPID</p>
+                    <p><span class="layui-badge-dot"></span>&nbsp;<span class="ocpp-font-color">[微信应用密钥]</span>微信公众平台申请开发者账号之后得到的APPSECRET</p>
+                    <p><span class="layui-badge-dot"></span>&nbsp;<span class="ocpp-font-color">[获取TOKEN地址]</span><span class="ocpp-font-color-red">[https://api.weixin.qq.com/cgi-bin/token]</span>通过该地址获取微信认证调用接口TOKEN</p>
+                    <p><span class="layui-badge-dot"></span>&nbsp;<span class="ocpp-font-color">[服务提醒模板]</span>:<span class="ocpp-font-color-red">[模板标识：NmHDLXmp7mZQVe8delWvayA9qvagciSKUWlJhn3BT7M]</span>通过该地址可以微信关注的所有用户</p>
+                    <p><span class="layui-badge-dot"></span>&nbsp;<span class="ocpp-font-color">[模板推送地址]</span><span class="ocpp-font-color-red">[https://api.weixin.qq.com/cgi-bin/message/template/send]</span>微信推送功能，通过此地址进行消息推送，需要注册服务号才能在微信公众平台添加模板管理菜单，然后进入此菜单，添加此模板</p>
+                    <p><span class="layui-badge-dot"></span>&nbsp;<span class="ocpp-font-color">[用户列表地址]</span><span class="ocpp-font-color-red">[https://api.weixin.qq.com/cgi-bin/user/get]</span>通过该地址可以当前微信关注的所有用户</p>
+                    <p><span class="layui-badge-dot"></span>&nbsp;<span class="ocpp-font-color">[指定发送用户]</span>该ID指的是用户openId，通过微信模板接口指定推送用户的openId，如果填写指定openId则根据指定openId进行推送，系统不调取用户列表接口，反之系统根据用户列表地址获取全部关注用户，进行推送</p>
+                    <p><span class="layui-badge-dot"></span>&nbsp;<span class="ocpp-font-color">[每批发送条数]</span>微信获取用户关注列表之后，每批次最高发送条数上限值是1000，不能大于1000</p>
+                </blockquote>
+
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">微信应用ID</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="appId" lay-verify="appId" autocomplete="off" placeholder="请输入微信开发者应用ID" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">微信应用密钥</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="appSecret" lay-verify="appSecret" autocomplete="off" placeholder="请输入微信开发者应用密钥" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">获取TOKEN地址</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="tokenUrl" lay-verify="url|tokenUrl" value="https://api.weixin.qq.com/cgi-bin/token" autocomplete="off" placeholder="请输入微信获取token路径" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">服务提醒模板</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="serviceTemplate" lay-verify="serviceTemplate" value="NmHDLXmp7mZQVe8delWvayA9qvagciSKUWlJhn3BT7M" autocomplete="off" placeholder="请输入微信【服务提醒模板】通知模板" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">模板推送地址</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="templateUrl" lay-verify="url|templateUrl" value="https://api.weixin.qq.com/cgi-bin/message/template/send" autocomplete="off" placeholder="请输入微信模板发送路径" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">用户列表地址</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="userListUrl" lay-verify="url|userListUrl" value="https://api.weixin.qq.com/cgi-bin/user/get" autocomplete="off" placeholder="请输入微信获取关注列表路径" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">指定发送用户</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="okUser" lay-verify="okUser" value="o8OZjuNAwTe2wmL5GMiswmHxEuKA,o8OZjuKxzZI2smRhfhGfovhpjDwc,o8OZjuAYSwTDq33ro2sFCCaEeQL0,o8OZjuC_YjELvKz3K-vYlaTeM8ss" autocomplete="off" placeholder="请输入指定用户openId(用于测试)" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">每批发送条数</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="number" lay-verify="number" value="1000" autocomplete="off" placeholder="请输入每批次发送条数上限" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-layer-btn-c">
+                    <button class="layui-btn layuiadmin-button-btn" lay-submit="submitBtn" lay-filter="submitBtn">
+                        <i class="layui-icon">&#xe609;</i>&nbsp;提交
+                    </button>
+                    <button class="layui-btn layui-btn-danger" type="reset">
+                        <i class="layui-icon">&#xe669;</i>&nbsp;重置
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/static/layuiadmin/layui/layui.js}" ></script>
+<script th:src="@{/static/ocpp/config/wechat.js}" charset="utf-8"></script>
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+server:
+  port: 8761
+
+spring:
+  application:
+    name: ocpp-eureka
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      default-zone: http://localhost:8761/eureka
+
+
+
+# 日志配置
+logging:
+  file: D:/ewip/log/${spring.application.name}/${spring.application.name}.log

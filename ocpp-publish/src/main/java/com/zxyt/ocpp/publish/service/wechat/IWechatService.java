@@ -16,10 +16,4 @@ public interface IWechatService {
      */
     void wechat(JSONObject json);
 
-    /**
-     * 推送三天预报信息
-     * @param json
-     */
-    JSONObject pushThreeWeatherInfo(JSONObject json);
-
 }

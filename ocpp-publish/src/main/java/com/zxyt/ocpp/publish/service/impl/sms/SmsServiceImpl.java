@@ -86,7 +86,7 @@ public class SmsServiceImpl implements ISmsService {
         JSONObject main = new JSONObject();
 
         // 1：读取短信配置信息
-        readSMSConfigInfo(json);
+        int status = readSMSConfigInfo(json);
 
         // 2：解析数据
         JSONObject sendMessage = setMessage(json);
@@ -203,7 +203,7 @@ public class SmsServiceImpl implements ISmsService {
      * 读取短信配置信息并设置全局参数信息
      * @param json
      */
-    private void readSMSConfigInfo(JSONObject json){
+    private int readSMSConfigInfo(JSONObject json){
         try{
             Map<String, Object> map = new HashMap<>();
             map.put("areaId", json.getString("areaId"));
@@ -223,10 +223,11 @@ public class SmsServiceImpl implements ISmsService {
             this.sendUrl = cc.getString("smsSendUrl");                            // 短信发送接口调用URL
             this.number = cc.getInteger("smsNumber");                             // 每批次发送条数(云MAS平台要求上限不超过200条每批次)
             log.info("获取短信配置信息成功");
+            return 200;
         }catch (Exception e){
             log.error("获取短信配置信息失败");
         }
-
+        return 500;
     }
 
     /**
