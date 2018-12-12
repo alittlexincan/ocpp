@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 /**
  * @ClassName Config
- * @Description TODO
  * @Author Xincan
  * @Version 1.0
  **/

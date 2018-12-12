@@ -10,7 +10,6 @@ import java.util.Map;
 
 /**
  * @ClassName IPublishService
- * @Description TODO
  * @Author Xincan
  * @Version 1.0
  **/

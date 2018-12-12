@@ -3,7 +3,6 @@ package com.zxyt.ocpp.client.utils;
 /**
  *
  * @ClassName MessageTypeUtil
- * @Description TODO
  * @Author Xincan
  * @Version 1.0
  **/
