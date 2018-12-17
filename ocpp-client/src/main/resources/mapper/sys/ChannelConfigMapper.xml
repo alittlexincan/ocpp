@@ -40,4 +40,9 @@
         DELETE FROM channel_config WHERE content->'$.type' = #{type} and channel_code = #{channelCode}
     </delete>
 
+    <!-- 查询FAX配置信息 -->
+    <select id="findConfigByCode" resultMap="BaseResultMap">
+        SELECT  c.id,c.area_id,c.organization_id,c.channel_code,c.content,c.create_time  FROM channel_config c where channel_code='FAX'
+    </select>
+
 </mapper>
