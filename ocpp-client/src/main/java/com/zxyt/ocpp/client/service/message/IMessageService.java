@@ -22,9 +22,4 @@ public interface IMessageService  extends IBaseService<Message> {
      */
     JSONObject selectFTPFileInfo(Map<String, Object> map);
 
-    /**
-     * 获取FTP信息
-     * @return
-     */
-    FTPConfig  getFTPConfig();
 }
