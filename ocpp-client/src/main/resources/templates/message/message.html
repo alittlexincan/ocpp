@@ -28,7 +28,7 @@
                             <div class="layui-inline ocpp-form-inline-margin">
                                 <label class="layui-form-label">文件类型</label>
                                 <div class="layui-input-inline">
-                                    <select  name="type" disabled placeholder="请选择文件类型">
+                                    <select  name="type" placeholder="请选择文件类型">
                                         <option value="">请选择文件类型</option>
                                         <option value="0">短期预报</option>
                                         <option value="1">中期预报</option>
@@ -39,6 +39,7 @@
                                     </select>
                                 </div>
                             </div>
+
                             <div class="layui-inline ocpp-form-inline-margin">
                                 <label class="layui-form-label">国突备案</label>
                                 <div class="layui-input-inline ocpp-input-border">
@@ -125,7 +126,56 @@
                         </div>
                     </div>
                 </div>
+                <!--文件列表-->
+                <div class="layui-col-md9 layui-col-sm9">
+                    <div class="layui-row layui-col-space5">
+                        <div class="layui-col-xs12 layui-col-md12">
+                            <div class="layui-card">
+                                <div class="layui-card-header"><span>&nbsp;&nbsp;<i class="layui-icon layui-icon-upload-drag warn-card-hader-icon"></i>附件上传</span></div>
+                                <div class="layui-card-body warn-file-list-height warn-center">
 
+                                    <!--文件上传初始化信息-->
+                                    <div class="warn-upload-msg">
+                                        <i class="layui-icon layui-icon-upload-drag"></i>
+                                        <span>点击上传</span>
+                                    </div>
+
+                                    <!--存放文本框列表-->
+                                    <div class="warn-file-list layui-hide"></div>
+                                    <!--文件信息展示列表-->
+                                    <table cellspacing="0" cellpadding="0" border="0"  class="layui-table layui-hide warn-file-table">
+                                        <thead>
+                                        <tr>
+                                            <th style="text-align: center">编号</th>
+                                            <th style="text-align: center">文件名称</th>
+                                            <th style="text-align: center">文件大小</th>
+                                            <th style="text-align: center">文件类型</th>
+                                            <th style="text-align: center">操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <!--<tr>-->
+                                        <!--<td>1</td>-->
+                                        <!--<td>abc.jpg</td>-->
+                                        <!--<td>128k</td>-->
+                                        <!--<td>jpg</td>-->
+                                        <!--<td><a class="layui-btn layui-btn-danger layui-btn-xs"><i class="layui-icon layui-icon-delete"></i>删除</a></td>-->
+                                        <!--</tr>-->
+                                        <!--<tr>-->
+                                        <!--<td>1</td>-->
+                                        <!--<td>abc.jpg</td>-->
+                                        <!--<td>128k</td>-->
+                                        <!--<td>jpg</td>-->
+                                        <!--<td><a class="layui-btn layui-btn-danger layui-btn-xs"><i class="layui-icon layui-icon-delete"></i>删除</a></td>-->
+                                        <!--</tr>-->
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <!--提交按钮-->
                 <div class="layui-col-sm12 layui-col-md12">
                     <div class="layui-row layui-col-space5">
@@ -136,6 +186,7 @@
                                         <button class="layui-btn layuiadmin-button-btn" lay-submit="submit" lay-filter="submit">
                                             <i class="layui-icon">&#xe609;</i>&nbsp;提交
                                         </button>
+                                        <button class="layui-btn layuiadmin-button-btn layui-btn-danger fileUpload">文件上传</button>
                                         <!--<button class="layui-btn layui-btn-danger" type="reset">-->
                                             <!--<i class="layui-icon">&#xe669;</i>&nbsp;重置-->
                                         <!--</button>-->
