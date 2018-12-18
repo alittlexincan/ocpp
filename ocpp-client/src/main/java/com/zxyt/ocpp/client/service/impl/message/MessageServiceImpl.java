@@ -10,6 +10,7 @@ import com.xincan.utils.ftp.FTPUtil;
 import com.zxyt.ocpp.client.config.common.universal.AbstractService;
 import com.zxyt.ocpp.client.entity.message.Message;
 import com.zxyt.ocpp.client.entity.message.MessageAreaChannel;
+import com.zxyt.ocpp.client.entity.message.MessageFile;
 import com.zxyt.ocpp.client.entity.message.MessageUser;
 import com.zxyt.ocpp.client.entity.sys.ChannelConfig;
 import com.zxyt.ocpp.client.mapper.message.IMessageAreaChannelMapper;
@@ -25,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.*;
@@ -77,7 +79,7 @@ public class MessageServiceImpl extends AbstractService<Message> implements IMes
      */
     @Override
     @Transactional
-    public JSONObject insert(Map<String, Object> map) {
+    public JSONObject insert(Map<String, Object> map,MultipartFile[] files) {
 
         Subject subject = SecurityUtils.getSubject();
         JSONObject employee = (JSONObject) subject.getSession().getAttribute("employee");
@@ -112,6 +114,8 @@ public class MessageServiceImpl extends AbstractService<Message> implements IMes
         getMessageUserInfo(json, messageId);
 
         json.put("id", messageId);
+        //添加文件列表
+        addMessageFile(message,files);
         if(!StringUtils.isEmpty(messageId)){
             json.put("code", 200);
             json.put("msg","一键发布成功");
@@ -358,6 +362,46 @@ public class MessageServiceImpl extends AbstractService<Message> implements IMes
         result.put("localFilePath", localFilePath);
         log.info("文件获取成功{}", result.toJSONString());
         return result;
+    }
+
+
+    /**
+     * 获取FTP信息
+     * @return
+     */
+    public FTPConfig getFTPConfig(){
+        ChannelConfig channelConfig = this.channelConfigMapper.findConfigByCode();
+        FTPConfig ftpConfig = new FTPConfig();
+        // 全局赋值
+        JSONObject cc = JSONObject.parseObject(channelConfig.getContent());
+        ftpConfig.setHost(cc.getString("host"));
+        ftpConfig.setPort(Integer.parseInt(cc.getString("port")));
+        ftpConfig.setUser(cc.getString("user"));
+        ftpConfig.setPassword(cc.getString("password"));
+        return ftpConfig;
+    }
+
+    /**
+     * 1：添加一键发布基本信息(上传的文件)
+     * @param
+     * @return
+     */
+    public void addMessageFile(Message message,MultipartFile[] files){
+        MessageFile messageFile = new MessageFile();
+        messageFile.setMessageId(message.getId());
+        messageFile.setName(message.getTitle());
+        String url = "";
+        String fileSize = "";
+        for (MultipartFile file : files) {
+            // 获取文件名
+            String fileName = file.getOriginalFilename();
+            url = url + fileName + ",";
+            fileSize = fileSize + file.getSize()+",";
+        }
+        messageFile.setUrl(url);
+        messageFile.setCreateTime(message.getCreateTime());
+        messageFile.setSize(fileSize);
+        messageMapper.insertMessageFile(messageFile);
     }
 
 }
