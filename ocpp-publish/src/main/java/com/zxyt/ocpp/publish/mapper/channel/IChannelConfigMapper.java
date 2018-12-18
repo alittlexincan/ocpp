@@ -1,5 +1,6 @@
 package com.zxyt.ocpp.publish.mapper.channel;
 
+import com.xincan.utils.ftp.FTPConfig;
 import com.zxyt.ocpp.publish.entity.ChannelConfig;
 import org.springframework.stereotype.Repository;
 
@@ -18,4 +19,10 @@ public interface IChannelConfigMapper {
      */
     ChannelConfig selectChannelConfig(Map<String, Object> map);
 
+
+    /**
+     * 获取传真信息
+     * @return
+     */
+    ChannelConfig getFTPConfig();
 }
