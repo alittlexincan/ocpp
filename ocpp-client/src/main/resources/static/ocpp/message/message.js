@@ -559,13 +559,23 @@ layui.use(['table','form','laydate','element','laytpl','layer','zTree','selectTr
             return JSON.stringify(group).replace(/\"/g,"'");
         }();
 
+        // 上传文件名称处理
+        let files = function () {
+            delete param.warnFile;
+            let file = [];
+            $(".warn-file-list > input[type='file']").each(function () {
+                file.push("warn-" + $(this).data("fileIndex"));
+            });
+            return file;
+        };
+
         // 数据提交
         ajaxFileUpload.render({
             async: true
             ,url : "/message/insert"
             ,type: "POST"
             ,param : param//需要传递的数据 json格式
-            ,files : []
+            ,files : files()
             ,dataType: 'json'
         },function (json) {
             if(json.code == 200){
@@ -581,6 +591,54 @@ layui.use(['table','form','laydate','element','laytpl','layer','zTree','selectTr
     $("form button[type='reset']").bind("click", function () {
         initAreaTree.refresh();
     });
+
+    /**
+     * 文件上传
+     */
+    $(".fileUpload, .warn-upload-msg").on("click", function () {
+        // 文件唯一标志
+        let index = new Date().getTime();
+        // 1:拼接文件文本框
+        $(".warn-file-list").append("<input type='file' id='warn-"+index+"' name='warnFile' class='warn-"+index+"' data-file-index='"+index+"'>");
+        // 2: 触发文件文本框
+        $(".warn-file-list > .warn-"+index).click().change(function () {
+            // 如果是最先添加则显示文件表格
+            if($(".warn-file-table").hasClass("layui-hide")){
+                $(".warn-file-table").removeClass("layui-hide");
+                // 3:隐藏初始化提示信息
+                $(".warn-upload-msg").addClass("layui-hide");
+            }
+            // 获取选中文件信息
+            let file = $(this)[0].files[0], size = file.size;
+            // 计算文件大小
+            let s = (size/1024) > 1024 ? (file.size/1024/1024).toFixed(2) + "MB": (file.size/1024).toFixed(2) + "KB";
+            // 拼接文件内容
+            let html = "<tr>";
+            html += "   <td>" + index + "</td>";
+            html += "   <td>" + file.name + "</td>";
+            html += "   <td>" + s + "</td>";
+            html += "   <td>" + file.name.substring(file.name.lastIndexOf(".")+1,file.name.length) + "</td>";
+            html += "   <td><a class='layui-btn layui-btn-danger layui-btn-xs' data-file-class='warn-" + index + "'><i class='layui-icon layui-icon-delete'></i>删除</a></td>";
+            html += "</tr>";
+            //追加到文件列表
+            $(".warn-file-table > tbody").append(html);
+            // 点击列表删除事件，删除当前行，并且删除，文件文本框
+            $(".warn-file-table > tbody > tr > td > a").on("click",function () {
+                let fileClass = $(this).data("fileClass");
+                // 删除文件文本框
+                $(".warn-file-list > ." + fileClass).remove();
+                // 删除当前行
+                $(this).parent().parent().remove();
+
+                if($(".warn-file-table > tbody > tr").length == 0){
+                    $(".warn-file-table").addClass("layui-hide");
+                    // 3:隐藏初始化提示信息
+                    $(".warn-upload-msg").removeClass("layui-hide");
+                }
+            });
+        });
+    });
+
 
     /**
      * 初始化监听
