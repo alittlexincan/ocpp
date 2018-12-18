@@ -26,4 +26,9 @@
 
 
     </select>
+
+    <!-- 查询FAX配置信息 -->
+    <select id="getFTPConfig" resultMap="BaseResultMap">
+        SELECT  content  FROM channel_config where channel_code='FAX'
+    </select>
 </mapper>
