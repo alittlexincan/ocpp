@@ -30,7 +30,7 @@ import java.util.Properties;
  * @Description:
  */
 @Slf4j
-@Service("emailService")
+@Service("faxService")
 public class FaxServiceImpl implements IFaxService {
 
     /**
