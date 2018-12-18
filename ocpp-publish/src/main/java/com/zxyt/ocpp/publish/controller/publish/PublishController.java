@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.zxyt.ocpp.publish.service.email.IEmailService;
+import com.zxyt.ocpp.publish.service.fax.IFaxService;
+import com.zxyt.ocpp.publish.service.led.ILedService;
 import com.zxyt.ocpp.publish.service.record.IRecordService;
 import com.zxyt.ocpp.publish.service.sms.ISmsService;
 import com.zxyt.ocpp.publish.service.wechat.IWechatService;
@@ -53,6 +55,17 @@ public class PublishController {
     @Autowired
     private IRecordService recordService;
 
+    /**
+     * 发布渠道：对接传真接口
+     */
+
+    private IFaxService faxService;
+
+    /**
+     * 发布渠道：对接显示屏接口
+     */
+
+    private ILedService ledService;
 
     /**
      * 渠道发布
@@ -69,8 +82,12 @@ public class PublishController {
             if(code.equals("SMS")) this.smsService.sms(json);
             // 微信
             if(code.equals("WECHAT")) this.wechatService.wechat(json);
-            // 微信
+            // 邮件
             if(code.equals("EMAIL")) this.emailService.email(json);
+            // 传真
+            if(code.equals("FAX")) this.faxService.fax(json);
+            // 显示屏
+            if(code.equals("LED")) this.ledService.led(json);
         }
 
         // 如果record国突标识为1，则需要对接国突
