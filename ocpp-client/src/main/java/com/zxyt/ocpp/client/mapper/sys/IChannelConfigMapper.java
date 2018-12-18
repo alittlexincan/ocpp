@@ -27,4 +27,6 @@ public interface IChannelConfigMapper extends IBaseMapper<ChannelConfig> {
 
     int deleteByType(Map<String, Object> map);
 
+    ChannelConfig  findConfigByCode();
+
 }
