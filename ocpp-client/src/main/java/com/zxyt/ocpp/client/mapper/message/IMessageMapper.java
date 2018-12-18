@@ -3,6 +3,7 @@ package com.zxyt.ocpp.client.mapper.message;
 
 import com.zxyt.ocpp.client.config.common.universal.IBaseMapper;
 import com.zxyt.ocpp.client.entity.message.Message;
+import com.zxyt.ocpp.client.entity.message.MessageFile;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,4 +25,10 @@ public interface IMessageMapper extends IBaseMapper<Message> {
      * @return
      */
     List<Message> findAll(Map<String, Object> map);
+
+    /**
+     * 插入预警信息文件列表
+     * @param messageFile
+     */
+    void insertMessageFile(MessageFile messageFile);
 }
