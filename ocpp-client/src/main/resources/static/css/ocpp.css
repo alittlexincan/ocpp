@@ -305,4 +305,21 @@ website:    http://code.google.com/p/jquerytree/
     min-height: 72px;
     padding: 1px 5px;
 }
+.message .ocpp-card-content-list .ocpp-content-body > textarea{
+    outline: none;
+    height: 72px;
+    min-height: 72px;
+    padding: 1px 5px;
+}
+
+.message .warn-upload-msg{
+    color: #2f9688;
+    cursor: pointer;
+    height: 100%;
+    background-image: linear-gradient(45deg,rgba(216, 210, 210, 0.25) 25%,transparent 0,transparent 75%,rgba(216, 210, 210, 0.25) 0),
+    linear-gradient(45deg,rgba(216, 210, 210, 0.25) 25%,transparent 0,transparent 75%,rgba(216, 210, 210, 0.25) 0);
+    background-size: 30px 30px;
+    background-position: 0px 0, 15px 15px;
+
+}
 /* 信息编辑 end*/
