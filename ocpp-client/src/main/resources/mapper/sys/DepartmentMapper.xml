@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxyt.ocpp.client.mapper.sys.IDepartmentMapper">
+
+    <resultMap id="BaseResultMap" type="com.zxyt.ocpp.client.entity.sys.Department">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="departmentName"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+    </resultMap>
+
+    <!-- 查询部门信息 -->
+    <select id="findAll" resultMap="BaseResultMap">
+        select
+          o.id,
+          o.name,
+          o.code
+        FROM department o where 1=1
+        <if test="id != null and id != ''">and id = #{id}</if>
+        <if test="departmentName != null and departmentName != ''">AND o.name LIKE '${departmentName}%'</if>
+        <if test="code != null and code != ''">AND o.code = #{code}</if>
+    </select>
+
+    <!-- 根据地区id查询地区信息 -->
+    <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        o.id,
+        o.name,
+        o.code
+        FROM department o where 1=1
+        <if test="id != null and id != ''">and o.id = #{id, jdbcType=VARCHAR}</if>
+    </select>
+
+    <!-- 根据部门code，部门类型查询部门信息 -->
+    <select id="selectDepartmentByCode"  resultMap="BaseResultMap">
+        SELECT
+        o.id,
+        o.name,
+        o.code
+        from department o where 1=1
+        <if test="code != null and code != ''">and o.code = #{code, jdbcType=VARCHAR}</if>
+    </select>
+</mapper>
