@@ -1,23 +1,18 @@
 package com.zxyt.ocpp.publish.controller.publish;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.zxyt.ocpp.publish.service.email.IEmailService;
 import com.zxyt.ocpp.publish.service.fax.IFaxService;
 import com.zxyt.ocpp.publish.service.led.ILedService;
 import com.zxyt.ocpp.publish.service.record.IRecordService;
+import com.zxyt.ocpp.publish.service.sina.ISinaWeiBoService;
 import com.zxyt.ocpp.publish.service.sms.ISmsService;
 import com.zxyt.ocpp.publish.service.wechat.IWechatService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Map;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Author: JiangXincan
@@ -58,14 +53,20 @@ public class PublishController {
     /**
      * 发布渠道：对接传真接口
      */
-
+    @Autowired
     private IFaxService faxService;
 
     /**
      * 发布渠道：对接显示屏接口
      */
-
+    @Autowired
     private ILedService ledService;
+
+    /**
+     * 发布渠道：对接新浪微博接口
+     */
+    @Autowired
+    private ISinaWeiBoService sinaWeiBoService;
 
     /**
      * 渠道发布
@@ -88,6 +89,10 @@ public class PublishController {
             if(code.equals("FAX")) this.faxService.fax(json);
             // 显示屏
             if(code.equals("LED")) this.ledService.led(json);
+            // 新浪微博
+            if(code.equals("WEIBO")) this.sinaWeiBoService.sinaWeiBo(json);
+
+
         }
 
         // 如果record国突标识为1，则需要对接国突

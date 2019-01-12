@@ -27,11 +27,14 @@
 
     <!--批量插入群组信息-->
     <insert id="insertBatch">
-        insert into message_user (id, message_id, channel_id, user_group_id, user_group_name, create_time )
-        values
-        <foreach collection="list" item="item" separator=",">
-            ( REPLACE(UUID(),'-',''), #{item.messageId}, #{item.channelId}, #{item.userGroupId}, #{item.userGroupName}, now())
-        </foreach>
+
+        <if test="list != null and list.size()>0">
+            insert into message_user (id, message_id, channel_id, user_group_id, user_group_name, create_time )
+            values
+            <foreach collection="list" item="item" separator=",">
+                ( REPLACE(UUID(),'-',''), #{item.messageId}, #{item.channelId}, #{item.userGroupId}, #{item.userGroupName}, now())
+            </foreach>
+        </if>
     </insert>
 
     <select id="selectByMessageId" resultMap="BaseUserResultMap">

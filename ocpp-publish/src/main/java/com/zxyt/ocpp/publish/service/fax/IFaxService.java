@@ -2,6 +2,7 @@ package com.zxyt.ocpp.publish.service.fax;
 
 import com.alibaba.fastjson.JSONObject;
 
+
 /**
  * @Author: Liweidong
  * @Description: 发布渠道：传真接口层

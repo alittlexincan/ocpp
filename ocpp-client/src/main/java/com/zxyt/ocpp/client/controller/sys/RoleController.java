@@ -34,9 +34,9 @@ public class RoleController {
     @ApiOperation(value="添加角色信息",httpMethod="POST",notes="根据参数列表添加角色信息")
     @ApiImplicitParams({
         @ApiImplicitParam(name="role",value="角色名称",required = true, dataType = "String",paramType = "query"),
-            @ApiImplicitParam(name="description",value="角色说明",required = true, dataType = "String",paramType = "query"),
-            @ApiImplicitParam(name="status", value="是否启用", required = true, dataType = "String",paramType = "query"),
-            @ApiImplicitParam(name="level",value="角色级别", required = true,dataType = "Integer",paramType = "query")
+        @ApiImplicitParam(name="description",value="角色说明",required = true, dataType = "String",paramType = "query"),
+        @ApiImplicitParam(name="status", value="是否启用", required = true, dataType = "String",paramType = "query"),
+        @ApiImplicitParam(name="level",value="角色级别", required = true,dataType = "Integer",paramType = "query")
     })
     @PostMapping("/insert")
     public ResultObject<Object> insert(@ApiParam(hidden = true) @RequestParam Map<String,Object> map){

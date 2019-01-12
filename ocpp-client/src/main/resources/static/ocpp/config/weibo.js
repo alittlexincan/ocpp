@@ -19,21 +19,31 @@ layui.use(["table","element","form","laytpl","layer","selectTree"], function(){
      * 自定义验证规则
      */
     form.verify({
-        host: value => {
-            if(value.length == 0) return '请输入显示屏连接地址如：192.168.1.123';
+        organizationName: value => {
+            if(value.length == 0) return '请输入新浪微博登录机构名称';
         }
-        ,port: value => {
-            if(value.length == 0) return '请输入显示屏连接端口如：21';
+        ,loginName: value => {
+            if(value.length == 0) return '请输入新浪微博登录用户名称';
         }
-        ,user: value => {
-            if(value.length == 0) return '请输入显示屏所在电脑登录用户';
+        ,loginPassword: value => {
+            if(value.length == 0) return '请输入新浪微博登录用户密码';
         }
-        ,password: value => {
-            if(value.length == 0) return '请输入显示屏所在电脑登录密码';
+        ,appKey: value => {
+            if(value.length == 0) return '请输入新浪微博授权App Key';
         }
-        ,path: value => {
-            if(value.length == 0) return '请输入显示屏映射目录';
+        ,appSecret: value => {
+            if(value.length == 0) return '请输入新浪微博授权App Secret';
         }
+        ,access_token : value => {
+            if(value.length == 0) return '请输入新浪微博签名码';
+        }
+        ,sinaSendUrl: value => {
+            if(value.length == 0) return '请输入新浪微博授权接口路径';
+        }
+        ,safeUrl: value =>{
+            if(value.length == 0) return '请输入新浪微博安全域名';
+        }
+
 
     });
 
@@ -56,6 +66,7 @@ layui.use(["table","element","form","laytpl","layer","selectTree"], function(){
                 ,url: param.url
                 ,dataType: 'JSON'
                 ,success: function(json){
+                    console.log(json);
                     callback(json);
                 }
             });
@@ -67,7 +78,7 @@ layui.use(["table","element","form","laytpl","layer","selectTree"], function(){
         ,initChannelInfo: () => {
             active.getData({
                 type: "POST",
-                data: {channelCode:"LED"},
+                data: {channelCode : "SINA_WEIBO", type:"SINA_WEIBO"},
                 url: "/channel/config/select/type"
             }, result => {
                 if(result.code == 200){
@@ -76,13 +87,15 @@ layui.use(["table","element","form","laytpl","layer","selectTree"], function(){
                 }
             });
         }
+
+
     };
 
     /**
      * 触发表单按钮点击事件后，立刻监听form表单提交，向后台传参
      */
-    form.on("submit(submitBtn)", function(data){
-        data.field.channelCode = "LED";
+    form.on("submit(submitBtnSina)", function(data){
+        data.field.channelCode = "SINA_WEIBO";
         active.getData({
             type: "POST",
             data: data.field ,
@@ -91,6 +104,8 @@ layui.use(["table","element","form","laytpl","layer","selectTree"], function(){
             layer.msg(result.msg, {time: 2000});
         });
     });
+
+
 
     /**
      * 监听列表中按钮事件
@@ -106,6 +121,7 @@ layui.use(["table","element","form","laytpl","layer","selectTree"], function(){
         let type = $(this).data('type');
         active[type] ? active[type].call(this) : '';
     });
+
 
     // 初始化加载配置渠道信息
     active.initChannelInfo();

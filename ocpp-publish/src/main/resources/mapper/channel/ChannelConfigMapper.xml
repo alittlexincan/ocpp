@@ -28,7 +28,23 @@
     </select>
 
     <!-- 查询FAX配置信息 -->
-    <select id="getFTPConfig" resultMap="BaseResultMap">
-        SELECT  content  FROM channel_config where channel_code='FAX'
+    <select id="getFaxFTPConfig" resultMap="BaseResultMap">
+        SELECT content FROM channel_config where channel_code='FAX'
     </select>
+
+    <!-- 查询FAX配置信息 -->
+    <select id="getLedFTPConfig" resultMap="BaseResultMap">
+        SELECT content FROM channel_config where channel_code='LED'
+    </select>
+
+    <select id="getSinaConfig" resultMap="BaseResultMap">
+        SELECT content FROM channel_config where channel_code='SINA_WEIBO'
+    </select>
+
+
+
+
+
+
+
 </mapper>

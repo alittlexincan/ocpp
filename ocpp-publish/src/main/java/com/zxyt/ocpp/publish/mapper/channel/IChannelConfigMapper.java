@@ -24,5 +24,17 @@ public interface IChannelConfigMapper {
      * 获取传真信息
      * @return
      */
-    ChannelConfig getFTPConfig();
+    ChannelConfig getLedFTPConfig();
+
+    /**
+     * 获取显示屏信息
+     * @return
+     */
+    ChannelConfig getFaxFTPConfig();
+
+    /**
+     * 获取新浪微博信息
+     * @return
+     */
+    ChannelConfig getSinaConfig();
 }

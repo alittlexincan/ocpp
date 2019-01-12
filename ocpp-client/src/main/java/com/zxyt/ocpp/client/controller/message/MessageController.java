@@ -1,29 +1,23 @@
 package com.zxyt.ocpp.client.controller.message;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.xincan.utils.ftp.FTPConfig;
-import com.xincan.utils.ftp.FTPUtil;
 import com.zxyt.ocpp.client.config.common.result.ResultObject;
 import com.zxyt.ocpp.client.config.common.result.ResultResponse;
 import com.zxyt.ocpp.client.service.message.IMessageService;
 import com.zxyt.ocpp.client.service.publish.IPublishService;
 import com.zxyt.ocpp.client.utils.UploadFileUtil;
 import io.swagger.annotations.*;
-import org.apache.commons.fileupload.disk.DiskFileItem;
-import org.apache.commons.io.FileUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Map;
-import com.alibaba.fastjson.JSONArray;
+import java.io.*;
+import java.util.*;
+
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 /**
  * @Author: JiangXincan
@@ -47,6 +41,19 @@ public class MessageController {
      */
     @Autowired
     private IPublishService publishService;
+
+    /**
+     * 获取上传的文件夹，具体路径参考application.properties中的配置
+     */
+    @Value("${web.upload-path}")
+    private String uploadPath;
+
+
+    /**
+     * 传真和显示屏文件上传文件夹
+     */
+    @Value("${web.messageFile-path}")
+    private String messageFile;
 
     @ApiOperation(value = "获取文件信息", httpMethod = "GET", notes = "根据FTP类型下载FTP上最新文件下载到本地制定路径，然后读取文件内容")
     @ApiImplicitParams({
@@ -80,10 +87,13 @@ public class MessageController {
     })
     @PostMapping(value = "/insert")
     public ResultObject<Object> insert(@ApiParam(hidden = true) @RequestParam Map<String, Object> map,@RequestParam("warnFile") MultipartFile[] files) throws IOException {
+
         JSONObject result = this.messageService.insert(map,files);
+
         if(result.getInteger("code") == 200){
-
-
+            // 文件开始上传
+            JSONArray file = UploadFileUtil.upload(files, uploadPath, messageFile);
+            result.put("files", file != null ? file.toJSONString() : "");
 
             // 调用分发接口
             this.publishService.publish(result);
@@ -92,5 +102,7 @@ public class MessageController {
         }
         return ResultResponse.make(500,result.getString("msg"),null);
     }
+
+
 
 }

@@ -208,6 +208,7 @@ public class MessageServiceImpl extends AbstractService<Message> implements IMes
                 list.add(messageUser);
             }
         }
+
         return this.messageUserMapper.insertBatch(list);
     }
 

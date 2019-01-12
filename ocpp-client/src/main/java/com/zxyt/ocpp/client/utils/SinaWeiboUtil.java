@@ -47,7 +47,7 @@ public class SinaWeiboUtil {
 
             JSONObject res = restTemplate.postForObject("https://api.weibo.com/2/statuses/update.json", HttpMethod.POST, JSONObject.class, map);
             System.out.println(res);
-        } catch (UnsupportedEncodingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

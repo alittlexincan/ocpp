@@ -5,23 +5,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.xincan.utils.ftp.FTPConfig;
 import com.xincan.utils.ftp.FTPUtil;
 import com.zxyt.ocpp.publish.entity.ChannelConfig;
-import com.zxyt.ocpp.publish.entity.Config;
 import com.zxyt.ocpp.publish.mapper.channel.IChannelConfigMapper;
-import com.zxyt.ocpp.publish.service.email.IEmailService;
 import com.zxyt.ocpp.publish.service.fax.IFaxService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 
 
 /**
@@ -33,17 +23,20 @@ import java.util.Properties;
 @Service("faxService")
 public class FaxServiceImpl implements IFaxService {
 
+
+
     /**
      * 注入渠道配置信息查询
      */
     @Autowired
     private IChannelConfigMapper channelConfigMapper;
 
-
+    @Value("${web.upload-path}")
+    private String uploadPath;
 
 
     /**
-     * 发送邮件
+     * 发送文件到ftp，然后在传真机上显示。
      * @param json
      */
     @Override
@@ -51,7 +44,7 @@ public class FaxServiceImpl implements IFaxService {
     public void fax(JSONObject json) {
 
         //获取传真配置信息
-        ChannelConfig channelConfig = channelConfigMapper.getFTPConfig();
+        ChannelConfig channelConfig = channelConfigMapper.getFaxFTPConfig();
         FTPConfig ftpConfig = new FTPConfig();
         // 全局赋值
         JSONObject cc = JSONObject.parseObject(channelConfig.getContent());
@@ -59,21 +52,24 @@ public class FaxServiceImpl implements IFaxService {
         ftpConfig.setPort(Integer.parseInt(cc.getString("port")));
         ftpConfig.setUser(cc.getString("user"));
         ftpConfig.setPassword(cc.getString("password"));
-//        if(FTPUtil.login(ftpConfig)) {
-//            // 文件开始上传
-//            for (MultipartFile file : files) {
-//                // 获取文件名
-//                String fileName = file.getOriginalFilename();
-//                // 获取文件后缀
-//                String prefix=fileName.substring(fileName.lastIndexOf("."));
-//                //创建临时文件
-//                File excelFile = File.createTempFile(fileName, prefix);
-//                // MultipartFile to File
-//                file.transferTo(excelFile);
-//                boolean isfile = FTPUtil.uploadFile(excelFile, fileName);
-//            }
-//            FTPUtil.close();
-//        }
+        String url = "null";
+        try {
+            if(FTPUtil.login(ftpConfig)) {
+                JSONArray files = json.getJSONArray("files");
+                if(files != null){
+                    for(int i = 0; i<files.size(); i++){
+                        JSONObject file = files.getJSONObject(i);
+                        url = file.getString("url");
+                    }
+                    //上传文件到ftp
+                    boolean flag = FTPUtil.uploadFile(uploadPath+url, "天气预报.txt");
+                }
+                //FTPUtil.close();//关闭资源
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
     }
